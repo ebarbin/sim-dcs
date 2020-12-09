@@ -1,0 +1,26 @@
+<div class="container">
+    <div class="marker-detail top-right" *ngIf="!hideLabel">
+        <span 
+            [style.color]="marker.coalition"
+            [style.font-size]="zoom - 5 +'px'">
+            {{marker.userName}}
+        </span>
+    </div>
+    <img [src]="marker.icon" [ngStyle]="getImageStyle()">
+    <div class="bottom-right" *ngIf="!hideLabel && showDetail">
+        <div class="marker-detail" style="width: 100%;">
+            <span 
+            [style.color]="marker.coalition"
+            [style.font-size]="zoom - 5 +'px'">
+            {{marker.altitude}} ft.
+        </span>
+        </div>
+        <div class="marker-detail" style="width: 100%;">
+            <span 
+            [style.color]="marker.coalition"
+            [style.font-size]="zoom - 5 +'px'">
+            {{marker.heading}} °
+        </span>
+        </div>
+    </div>
+</div>

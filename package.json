@@ -1,0 +1,32 @@
+{
+  "name": "sim-dcs",
+  "version": "1.0.0",
+  "description": "node server",
+  "main": "web.js",
+  "scripts": {
+    "start": "node server.js",
+    "build": "webpack",
+    "dev": "nodemon ./server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "ebarbin",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^12.5.1",
+    "express": "^4.17.1",
+    "firebase-admin": "^9.4.1",
+    "moment": "^2.29.1",
+    "mongoose": "^5.11.1",
+    "ws": "^7.4.1"
+  },
+  "devDependencies": {
+    "del": "^5.1.0",
+    "fancy-log": "^1.3.3",
+    "gulp": "^4.0.2",
+    "gulp-zip": "^5.0.1",
+    "nodemon": "^2.0.2",
+    "webpack": "^4.42.1",
+    "webpack-cli": "^4.2.0",
+    "webpack-stream": "^5.2.1"
+  }
+}
