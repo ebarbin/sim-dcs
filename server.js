@@ -1,6 +1,5 @@
 const express = require('express');
 const bodyParser = require("body-parser");
-const mongoose = require('mongoose');
 
 const Position = require('./models/Position');
 
@@ -25,24 +24,32 @@ app.get('/api/positions', (req, res) => {
   })
 });
 
-/*app.get('/api/users', (req, res) => {
-  res.json([]);
-});
-
-app.post('/api/user', (req, res) => {
-  const user = req.body.user;
-  users.push(user);
-  res.json("user addedd");
-});*/
-
 app.get('/*', (req,res) => {
   res.sendFile(process.cwd()+"/app/dist/sim-dcs/index.html")
 });
 
-//app.listen(WEBSERVER_PORT,'0.0.0.0', () => { console.log('Server listening on the port ' + WEBSERVER_PORT) });
+const Discord = require('discord.js');
+const client = new Discord.Client();
 
-mongoose.connect('mongodb://localhost:27017/sim-dcs', { useNewUrlParser: true, useUnifiedTopology: true }).then(() =>{
+client.on('ready', () => {
+  console.log(`Logged in as ${client.user.tag}!`);
+});
+
+client.on('message', msg => {
+  if (msg.content === 'ping') {
+    msg.channel.send('pong');
+  }
+});
+
+client.login('Nzg2Mjg5MDUxNjk0MTM3MzQ1.X9EOvg.pbp1Gy4TwyuolLkHSLz3xx4N1mM').then((data)=>{
+  console.log(data);
+})
+console.log(client.channels.cache.get("444337434176520193"));
+app.listen(WEBSERVER_PORT,'0.0.0.0', () => { console.log('Server listening on the port ' + WEBSERVER_PORT) });
+
+/*mongoose.connect('mongodb://localhost:27017/sim-dcs', { useNewUrlParser: true, useUnifiedTopology: true }).then(() =>{
   app.listen(WEBSERVER_PORT,'0.0.0.0', () => { console.log('Server listening on the port ' + WEBSERVER_PORT) });
 }).catch(err => {
   console.log(err);
-});
+});*/
+
