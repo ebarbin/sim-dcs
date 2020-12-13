@@ -10,6 +10,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatTableModule } from '@angular/material/table';
 
 import { MarkerDetailDialogComponent } from './componets/marker-detail-dialog/marker-detail-dialog.component';
 
@@ -29,7 +30,8 @@ import { MarkerDetailDialogComponent } from './componets/marker-detail-dialog/ma
     MatMenuModule,
     MatSidenavModule,
     MatSelectModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatTableModule
   ],
   exports: [
     MatDialogModule,
@@ -42,7 +44,8 @@ import { MarkerDetailDialogComponent } from './componets/marker-detail-dialog/ma
     MatMenuModule,
     MatSidenavModule,
     MatSelectModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatTableModule
   ],
   entryComponents: [
     MarkerDetailDialogComponent

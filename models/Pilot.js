@@ -5,11 +5,11 @@ const pilotSchema = new Schema({
     userName: String,
     stats: [
         { 
-            ejections: Number, crashs:Number, deads: Number, takeOffs: Number, landings: Number, flightTime: Number, airCraftModel: String, 
+            ejections: Number, crashs:Number, deads: Number, takeOffs: Number, landings: Number, flightTime: Number, aircraftModel: String, 
             weaponStats: [ { weaponType: String, weaponName: String, fireTime: Number, hitTime: Number } ]
         }
     ],
-    flightEvents : [{type: String, airCraftModel: String, weaponType: String, weaponName: String, date: Date}],
+    flightEvents : [{type: String, aircraftModel: String, weaponType: String, weaponName: String, date: Date}],
     created: { 
         type: Date,
         default: Date.now

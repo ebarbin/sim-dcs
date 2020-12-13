@@ -21,7 +21,7 @@ const positionSchema = new Schema({
     groupName: String,
     isHuman: Boolean,
     heading: String,
-    airCraftModel: String,
+    aircraftModel: String,
     userName: String,
     lat: Number,
     lng: Number,

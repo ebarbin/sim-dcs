@@ -37,7 +37,7 @@ udpserver.on('message', (msg, rinfo) => {
         groupName: data[3],
         isHuman: data[4],
         heading: Math.trunc(Math.round(heading)),
-        airCraftModel: data[6],
+        aircraftModel: data[6],
         userName: data[7],
         lat: data[9],
         lng: data[8],

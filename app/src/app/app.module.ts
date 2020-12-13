@@ -14,7 +14,8 @@ import { HeaderComponent } from './navigation/components/header/header.component
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { AgmOverlays } from "agm-overlays";
 import { DcsMapComponent } from './map/components/dcs-map/dcs-map.component';
-import { DcsMapMarkerComponent } from './map/components/dcs-map-marker/dcs-map-marker.component'
+import { DcsMapMarkerComponent } from './map/components/dcs-map-marker/dcs-map-marker.component';
+import { PilotsComponent } from './pilots/pilots.component'
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { DcsMapMarkerComponent } from './map/components/dcs-map-marker/dcs-map-m
     SidenavListComponent,
     HeaderComponent,
     DcsMapComponent,
-    DcsMapMarkerComponent
+    DcsMapMarkerComponent,
+    PilotsComponent
   ],
   imports: [
     BrowserModule,

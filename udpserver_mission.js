@@ -3,6 +3,8 @@ var moment = require('moment');
 
 const Position = require('./models/Position');
 const Pilot = require('./models/Pilot');
+const AircraftModel = require('./models/AircraftModel');
+
 
 var udpserver = net.createSocket('udp4');
 
@@ -16,7 +18,7 @@ udpserver.on('message', (msg, rinfo) => {
 
     const data = msg.toString('utf-8').split(',');
     const eventType = data[1];
-    const airCraftModel = data[5];
+    const aircraftModel = data[5];
     const userName = data[6];
     const weaponType =  data[7];
     const weaponName = data[8];
@@ -29,31 +31,36 @@ udpserver.on('message', (msg, rinfo) => {
         return;
     }
     
-    if (userName == 'AI') return;
+    //if (userName == 'AI') return;
 
     Pilot.find({userName: userName}).then((pilots) => {
         
         if (eventType == 'S_EVENT_BIRTH' || eventType == 'S_EVENT_BIRTH_AIRBORNE') {
             if (pilots.length == 0) {
-                const newPilot = new Pilot({ 
+                
+                new Pilot({ 
                     userName: userName, 
-                    stats: [{crashs:0, deads: 0, takeOffs: 0, landings: 0, flightTime: 0, airCraftModel: airCraftModel, weaponStats: []}], 
+                    stats: [{crashs:0, deads: 0, takeOffs: 0, landings: 0, flightTime: 0, aircraftModel: aircraftModel, weaponStats: []}], 
                     flightEvents: [] 
+                }).save().then(() => console.log('Pilot added'));
+
+                AircraftModel.find({name:aircraftModel}).then(aircraftModels => {
+                    if (aircraftModels.length == 0) new AircraftModel({name: aircraftModel}).save().then(() => console.log('Aircraft model added'));
                 });
-                newPilot.save().then(() => console.log('Pilot added'));
+
                 return;
             } else {
                 let pilot = pilots[0];
-                let stat = pilot.stats.find(s => s.airCraftModel == airCraftModel);
+                let stat = pilot.stats.find(s => s.aircraftModel == aircraftModel);
                 if (!stat) {
-                    pilot.stats.push({crashs:0, deads: 0, takeOffs: 0, landings: 0, flightTime: 0, airCraftModel: airCraftModel, weaponStats: []});
+                    pilot.stats.push({crashs:0, deads: 0, takeOffs: 0, landings: 0, flightTime: 0, aircraftModel: aircraftModel, weaponStats: []});
                     pilot.save().then(() => console.log('Pilot updated'));
                 }
             }
         } else if (eventType == 'S_EVENT_TAKEOFF') {
             let pilot = pilots[0];
-            pilot.flightEvents.push({type:'S_EVENT_TAKEOFF', airCraftModel: airCraftModel, date: new Date()});
-            let stat = pilot.stats.find(s => s.airCraftModel == airCraftModel);
+            pilot.flightEvents.push({type:'S_EVENT_TAKEOFF', aircraftModel: aircraftModel, date: new Date()});
+            let stat = pilot.stats.find(s => s.aircraftModel == aircraftModel);
             stat.takeOffs++;
 
             pilot.save().then(() => console.log('Pilot updated'));
@@ -63,8 +70,8 @@ udpserver.on('message', (msg, rinfo) => {
             let currentDate = new Date(); 
 
             //Flight Time
-            let events = pilot.flightEvents.filter(fe => fe.airCraftModel == airCraftModel);
-            let stat = pilot.stats.find(s => s.airCraftModel == airCraftModel);
+            let events = pilot.flightEvents.filter(fe => fe.aircraftModel == aircraftModel);
+            let stat = pilot.stats.find(s => s.aircraftModel == aircraftModel);
 
             let tkEvent = events.find(e => e.type == 'S_EVENT_TAKEOFF');
             if (tkEvent == null) {
@@ -91,9 +98,9 @@ udpserver.on('message', (msg, rinfo) => {
 //2947,S_EVENT_LAND,16799745,blue,AIRPLANE,FA-18C_hornet,[CETAV] - emucho,No Weapon,No Weapon,,,,, from 192.168.0.39:51090
 //226,S_EVENT_EJECTION,16777728,blue,AIRPLANE,F-14B,AI,No Weapon,No Weapon,,,,, from 192.168.0.39:54465
 
-            pilot.flightEvents.push({type:'S_EVENT_SHOT', airCraftModel: airCraftModel, weaponType: weaponType, weaponName: weaponName, date: new Date()});
+            pilot.flightEvents.push({type:'S_EVENT_SHOT', aircraftModel: aircraftModel, weaponType: weaponType, weaponName: weaponName, date: new Date()});
 
-            let stat = pilot.stats.find(s => s.airCraftModel == airCraftModel);
+            let stat = pilot.stats.find(s => s.aircraftModel == aircraftModel);
             let weaponStat = stat.weaponStats.find(ws => ws.weaponName == weaponName && ws.weaponType == weaponType);
             if (!weaponStat) {
                 weaponStat = { weaponType: weaponType, weaponName: weaponName, fireTime: 0, hitTime: 0 };
@@ -106,11 +113,11 @@ udpserver.on('message', (msg, rinfo) => {
         } else if (eventType == 'S_EVENT_HIT') {
             let pilot = pilots[0];
             pilot.flightEvents.push({
-                type:'S_EVENT_HIT', airCraftModel: airCraftModel, weaponType: weaponType, 
+                type:'S_EVENT_HIT', aircraftModel: aircraftModel, weaponType: weaponType, 
                 weaponName: weaponName, target: {coalition: data[10], group: data[11], name: data[12], type: data[13]}, date: new Date()
             });
 
-            let stat = pilot.stats.find(s => s.airCraftModel == airCraftModel);
+            let stat = pilot.stats.find(s => s.aircraftModel == aircraftModel);
             let weaponStat = stat.weaponStats.find(ws => ws.weaponName == weaponName && ws.weaponType == weaponType);
             if (!weaponStat) {
                 weaponStat = { weaponType: weaponType, weaponName: weaponName, fireTime: 0, hitTime: 0 };
@@ -123,7 +130,7 @@ udpserver.on('message', (msg, rinfo) => {
         } else if (eventType == 'S_EVENT_PILOT_DEAD') {
             let pilot = pilots[0];
 
-            let stat = pilot.stats.find(s => s.airCraftModel == airCraftModel);
+            let stat = pilot.stats.find(s => s.aircraftModel == aircraftModel);
             stat.deads++;
 
             pilot.flightEvents = [];
@@ -136,7 +143,7 @@ udpserver.on('message', (msg, rinfo) => {
         } else if (eventType == 'S_EVENT_CRASH') {
             let pilot = pilots[0];
 
-            let stat = pilot.stats.find(s => s.airCraftModel == airCraftModel);
+            let stat = pilot.stats.find(s => s.aircraftModel == aircraftModel);
             stat.crashs++;
             pilot.flightEvents = [];
 
@@ -150,7 +157,7 @@ udpserver.on('message', (msg, rinfo) => {
         } else if (eventType == 'S_EVENT_EJECTION') {
             let pilot = pilots[0];
 
-            let stat = pilot.stats.find(s => s.airCraftModel == airCraftModel);
+            let stat = pilot.stats.find(s => s.aircraftModel == aircraftModel);
             stat.ejections++;
             pilot.flightEvents = [];
 
