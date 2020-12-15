@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 const express = require('express');
-const bodyParser = require("body-parser");
+const path = require('path');
 const db = require('mongoose');
 const session = require('express-session');
 const passport = require('passport');
@@ -12,7 +12,11 @@ const app = express();
 require('./udpserver_position').bind(process.env.UDPSERVER_POSITION_PORT);
 require('./udpserver_mission').bind(process.env.UDPSERVER_MISSION_PORT);
 
-app.use(express.static(process.cwd()+"/app/dist/"));
+app.set('views', path.join(__dirname, 'views'));
+app.use(express.static(process.cwd() + "/app/dist/"));
+app.use(express.static('./public'));
+
+app.set('view engine', 'ejs');
 
 app.use(session({
   secret: 'some random secret',
@@ -27,7 +31,7 @@ app.use(passport.session());
 
 app.use('/api', require('./routes/api-rest'));
 app.use('/auth', require('./routes/auth'));
-app.use('/*', require('./routes/router'));
+app.use(require('./routes/router'));
 
 db.connect(process.env.MONGO_DB_URL, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => console.log('Database ' + process.env.MONGO_DB_URL + ' connected.'));
 

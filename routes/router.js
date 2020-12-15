@@ -6,9 +6,16 @@ function isAuthorized (req, res, next) {
   else res.redirect('/auth');
 };
 
+router.get('/sim-dcs/home', isAuthorized, (req, res) => {
+  res.sendFile(process.cwd()+"/app/dist/sim-dcs/index.html");
+});
+
 router.get('/', isAuthorized, (req, res) => {
-  res.setHeader('token', req.user.token);
-  res.sendFile(process.cwd()+"/app/dist/sim-dcs/index.html")
+  res.render('access', {user: req.user});
+});
+
+router.get('/forbidden', (req, res) => {
+  res.render('forbidden');
 });
 
 module.exports = router;

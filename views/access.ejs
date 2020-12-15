@@ -1,0 +1,12 @@
+<html>
+    <head></head>
+    <body>
+        <h1>Iniciando!</h1>
+    </body>
+</html>
+
+<script>
+    var user = <%- JSON.stringify(user) %>;
+    localStorage.setItem("user", JSON.stringify(user));
+    document.location.href = "/sim-dcs/home";
+</script>

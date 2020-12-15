@@ -578,7 +578,7 @@ class AuthGuard {
     }
     canActivate(next, state) {
         if (!this.sessionService.isAuthenticated()) {
-            this.document.location.href = 'http://localhost:3080/auth';
+            this.document.location.href = '/auth';
             return false;
         }
         return true;
@@ -1122,7 +1122,7 @@ class SidenavListComponent {
     }
 }
 SidenavListComponent.ɵfac = function SidenavListComponent_Factory(t) { return new (t || SidenavListComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](_angular_material_dialog__WEBPACK_IMPORTED_MODULE_2__["MatDialog"]), _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdirectiveInject"](src_app_session_service__WEBPACK_IMPORTED_MODULE_3__["SessionService"])); };
-SidenavListComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineComponent"]({ type: SidenavListComponent, selectors: [["app-sidenav-list"]], outputs: { sidenavClose: "sidenavClose" }, decls: 21, vars: 0, consts: [["mat-list-item", "", "routerLink", "/home", 3, "click"], [1, "nav-caption"], ["mat-list-item", "", "routerLink", "/pilots", 3, "click"], ["mat-list-item", "", "routerLink", "#", 3, "click"], ["matline", "", 3, "click"]], template: function SidenavListComponent_Template(rf, ctx) { if (rf & 1) {
+SidenavListComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineComponent"]({ type: SidenavListComponent, selectors: [["app-sidenav-list"]], outputs: { sidenavClose: "sidenavClose" }, decls: 16, vars: 0, consts: [["mat-list-item", "", "routerLink", "/home", 3, "click"], [1, "nav-caption"], ["mat-list-item", "", "routerLink", "/pilots", 3, "click"], ["matline", "", 3, "click"]], template: function SidenavListComponent_Template(rf, ctx) { if (rf & 1) {
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "mat-nav-list");
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](1, "a", 0);
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("click", function SidenavListComponent_Template_a_click_1_listener() { return ctx.onSidenavClose(); });
@@ -1142,22 +1142,13 @@ SidenavListComponent.ɵcmp = _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdef
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](10, "Pilots");
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](11, "a", 3);
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("click", function SidenavListComponent_Template_a_click_11_listener() { return ctx.onSidenavClose(); });
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](11, "mat-list-item");
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](12, "mat-icon");
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](13, "account_balance");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](13, "logout");
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](14, "span", 1);
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](15, "Account Actions");
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](16, "mat-list-item");
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](17, "mat-icon");
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](18, "logout");
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](19, "a", 4);
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("click", function SidenavListComponent_Template_a_click_19_listener() { return ctx.logout(); });
-        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](20, "Logout");
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](14, "a", 3);
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("click", function SidenavListComponent_Template_a_click_14_listener() { return ctx.logout(); });
+        _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](15, "Logout");
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
         _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
@@ -1337,7 +1328,7 @@ class PositionsService {
                 let icon = '../../../sim-dcs/assets/images/topdown_f18.png';
                 if (pos.aircraftModel == 'KC135MPRS' || pos.aircraftModel == 'KC-135')
                     icon = '../../../sim-dcs/assets/images/topdown_tanker.png';
-                if (pos.aircraftModel == 'UH-1H')
+                else if (pos.aircraftModel == 'UH-1H')
                     icon = '../../../sim-dcs/assets/images/topdown_heli.png';
                 let coalition = 'blue';
                 if (pos.coalitionId == 1)
@@ -1394,23 +1385,18 @@ class SessionService {
         this.http = http;
         this.rootURL = '/api';
     }
-    checkLogin() {
-        return this.http.get(this.rootURL + '/auth/check' + this.token);
-    }
-    getAuthPage() {
-        return this.http.get(this.rootURL + '/auth/page');
-    }
     isAuthenticated() {
-        let ca = this.document.cookie.split(';');
-        this.cookieService.set('test', 'test');
-        console.log(this.cookieService.get('test'));
-        const cookie = this.cookieService.get('discord-oauth');
-        console.log(cookie);
-        return cookie ? true : true;
+        const strUser = localStorage.getItem('user');
+        if (strUser) {
+            this.user = JSON.parse(strUser);
+            return true;
+        }
+        return false;
     }
     logout() {
+        this.user = null;
+        localStorage.clear();
         this.document.location.href = '/auth/logout';
-        //return this.http.get(this.rootURL + '/auth/logout');
     }
 }
 SessionService.ɵfac = function SessionService_Factory(t) { return new (t || SessionService)(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵinject"](_angular_common__WEBPACK_IMPORTED_MODULE_0__["DOCUMENT"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵinject"](ngx_cookie_service__WEBPACK_IMPORTED_MODULE_2__["CookieService"]), _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵinject"](_angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpClient"])); };

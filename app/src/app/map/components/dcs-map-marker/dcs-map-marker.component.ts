@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { PositionsService } from 'src/app/positions.service';
+import { PositionsService } from 'src/app/services/positions.service';
 
 @Component({
   selector: 'app-dcs-map-marker',

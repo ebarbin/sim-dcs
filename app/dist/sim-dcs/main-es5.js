@@ -1027,7 +1027,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         key: "canActivate",
         value: function canActivate(next, state) {
           if (!this.sessionService.isAuthenticated()) {
-            this.document.location.href = 'http://localhost:3080/auth';
+            this.document.location.href = '/auth';
             return false;
           }
 
@@ -2219,9 +2219,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       outputs: {
         sidenavClose: "sidenavClose"
       },
-      decls: 21,
+      decls: 16,
       vars: 0,
-      consts: [["mat-list-item", "", "routerLink", "/home", 3, "click"], [1, "nav-caption"], ["mat-list-item", "", "routerLink", "/pilots", 3, "click"], ["mat-list-item", "", "routerLink", "#", 3, "click"], ["matline", "", 3, "click"]],
+      consts: [["mat-list-item", "", "routerLink", "/home", 3, "click"], [1, "nav-caption"], ["mat-list-item", "", "routerLink", "/pilots", 3, "click"], ["matline", "", 3, "click"]],
       template: function SidenavListComponent_Template(rf, ctx) {
         if (rf & 1) {
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](0, "mat-nav-list");
@@ -2266,41 +2266,21 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](11, "a", 3);
-
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("click", function SidenavListComponent_Template_a_click_11_listener() {
-            return ctx.onSidenavClose();
-          });
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](11, "mat-list-item");
 
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](12, "mat-icon");
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](13, "account_balance");
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](13, "logout");
 
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](14, "span", 1);
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](14, "a", 3);
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](15, "Account Actions");
-
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
-
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
-
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](16, "mat-list-item");
-
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](17, "mat-icon");
-
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](18, "logout");
-
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
-
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementStart"](19, "a", 4);
-
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("click", function SidenavListComponent_Template_a_click_19_listener() {
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵlistener"]("click", function SidenavListComponent_Template_a_click_14_listener() {
             return ctx.logout();
           });
 
-          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](20, "Logout");
+          _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵtext"](15, "Logout");
 
           _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵelementEnd"]();
 
@@ -2701,8 +2681,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           return this.http.get(this.rootURL + '/positions').pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_1__["map"])(function (positions) {
             return positions.map(function (pos) {
               var icon = '../../../sim-dcs/assets/images/topdown_f18.png';
-              if (pos.aircraftModel == 'KC135MPRS' || pos.aircraftModel == 'KC-135') icon = '../../../sim-dcs/assets/images/topdown_tanker.png';
-              if (pos.aircraftModel == 'UH-1H') icon = '../../../sim-dcs/assets/images/topdown_heli.png';
+              if (pos.aircraftModel == 'KC135MPRS' || pos.aircraftModel == 'KC-135') icon = '../../../sim-dcs/assets/images/topdown_tanker.png';else if (pos.aircraftModel == 'UH-1H') icon = '../../../sim-dcs/assets/images/topdown_heli.png';
               var coalition = 'blue';
               if (pos.coalitionId == 1) coalition = 'red';
               return {
@@ -2808,29 +2787,23 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }
 
       _createClass(SessionService, [{
-        key: "checkLogin",
-        value: function checkLogin() {
-          return this.http.get(this.rootURL + '/auth/check' + this.token);
-        }
-      }, {
-        key: "getAuthPage",
-        value: function getAuthPage() {
-          return this.http.get(this.rootURL + '/auth/page');
-        }
-      }, {
         key: "isAuthenticated",
         value: function isAuthenticated() {
-          var ca = this.document.cookie.split(';');
-          this.cookieService.set('test', 'test');
-          console.log(this.cookieService.get('test'));
-          var cookie = this.cookieService.get('discord-oauth');
-          console.log(cookie);
-          return cookie ? true : true;
+          var strUser = localStorage.getItem('user');
+
+          if (strUser) {
+            this.user = JSON.parse(strUser);
+            return true;
+          }
+
+          return false;
         }
       }, {
         key: "logout",
         value: function logout() {
-          this.document.location.href = '/auth/logout'; //return this.http.get(this.rootURL + '/auth/logout');
+          this.user = null;
+          localStorage.clear();
+          this.document.location.href = '/auth/logout';
         }
       }]);
 

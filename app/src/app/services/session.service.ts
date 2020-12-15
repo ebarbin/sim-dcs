@@ -12,26 +12,24 @@ export class SessionService {
 
   rootURL = '/api';
 
-  token;
-  checkLogin() {
-    return this.http.get(this.rootURL + '/auth/check' + this.token);
-  }
+  user;
 
-  getAuthPage() {
-    return this.http.get(this.rootURL + '/auth/page');
+  getUser() {
+    return this.user;
   }
-
+  
   isAuthenticated() {
-    let ca: Array<string> = this.document.cookie.split(';');
-    this.cookieService.set('test', 'test');
-console.log(this.cookieService.get('test'));
-    const cookie = this.cookieService.get('discord-oauth');
-    console.log(cookie);
-    return cookie ? true : true;
+    const strUser = localStorage.getItem('user');
+    if (strUser) {
+      this.user = JSON.parse(strUser);
+      return true;
+    }
+    return false;
   }
 
   logout() {
+    this.user = null;
+    localStorage.clear();
     this.document.location.href = '/auth/logout';
-    //return this.http.get(this.rootURL + '/auth/logout');
   }
 }

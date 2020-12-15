@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
-import { SessionService } from './session.service';
+import { SessionService } from './services/session.service';
 import { DOCUMENT } from '@angular/common';
 
 @Injectable({
@@ -16,7 +16,7 @@ export class AuthGuard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
 
       if (!this.sessionService.isAuthenticated()) {
-        this.document.location.href = 'http://localhost:3080/auth';
+        this.document.location.href = '/auth';
         return false;
       }
       return true;

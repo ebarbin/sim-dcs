@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AgmCoreModule } from '@agm/core';
@@ -16,7 +16,7 @@ import { AgmOverlays } from "agm-overlays";
 import { DcsMapComponent } from './map/components/dcs-map/dcs-map.component';
 import { DcsMapMarkerComponent } from './map/components/dcs-map-marker/dcs-map-marker.component';
 import { PilotsComponent } from './pilots/pilots.component'
-import { CookieService } from 'ngx-cookie-service';
+import { TokenInterceptor } from './token.interceptor';
 @NgModule({
   declarations: [
     AppComponent,
@@ -40,7 +40,13 @@ import { CookieService } from 'ngx-cookie-service';
     AgmOverlays,
     FlexLayoutModule
   ],
-  providers: [CookieService],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
