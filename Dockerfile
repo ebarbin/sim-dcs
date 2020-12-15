@@ -8,8 +8,8 @@ WORKDIR /root/
 COPY --from=ui-build /usr/src/app/app/dist ./app/dist
 COPY package*.json ./
 RUN npm install
-COPY server.js .
+COPY app.js .
 
 EXPOSE 3080
 
-CMD ["node", "server.js"]
+CMD ["node", "app.js"]

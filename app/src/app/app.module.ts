@@ -16,7 +16,7 @@ import { AgmOverlays } from "agm-overlays";
 import { DcsMapComponent } from './map/components/dcs-map/dcs-map.component';
 import { DcsMapMarkerComponent } from './map/components/dcs-map-marker/dcs-map-marker.component';
 import { PilotsComponent } from './pilots/pilots.component'
-
+import { CookieService } from 'ngx-cookie-service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -40,7 +40,7 @@ import { PilotsComponent } from './pilots/pilots.component'
     AgmOverlays,
     FlexLayoutModule
   ],
-  providers: [],
+  providers: [CookieService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

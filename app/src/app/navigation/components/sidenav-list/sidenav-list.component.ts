@@ -1,4 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from 'src/app/app-material/components/confirm-dialog/confirm-dialog.component';
+import { SessionService } from 'src/app/session.service';
  
 @Component({
   selector: 'app-sidenav-list',
@@ -8,13 +11,19 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 export class SidenavListComponent implements OnInit {
   @Output() sidenavClose = new EventEmitter();
  
-  constructor() { }
+  constructor(private dialog: MatDialog, private sessionService: SessionService) { }
  
-  ngOnInit() {
-  }
+  ngOnInit() {}
  
   public onSidenavClose = () => {
     this.sidenavClose.emit();
   }
  
+  logout() {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) this.sessionService.logout();
+    });    
+  }
+
 }

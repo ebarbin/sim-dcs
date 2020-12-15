@@ -12,11 +12,13 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTableModule } from '@angular/material/table';
 
-import { MarkerDetailDialogComponent } from './componets/marker-detail-dialog/marker-detail-dialog.component';
+import { MarkerDetailDialogComponent } from './components/marker-detail-dialog/marker-detail-dialog.component';
+import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 
 @NgModule({
   declarations: [
-    MarkerDetailDialogComponent
+    MarkerDetailDialogComponent,
+    ConfirmDialogComponent
   ],
   imports: [
     CommonModule,
@@ -48,6 +50,7 @@ import { MarkerDetailDialogComponent } from './componets/marker-detail-dialog/ma
     MatTableModule
   ],
   entryComponents: [
+    ConfirmDialogComponent,
     MarkerDetailDialogComponent
   ]
 })

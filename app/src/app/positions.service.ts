@@ -16,9 +16,9 @@ export class PositionsService {
       map((positions:any) => {
         return positions.map(pos => {
 
-          let icon = '../../../assets/images/topdown_f18.png'; 
-          if (pos.aircraftModel == 'KC135MPRS' || pos.aircraftModel == 'KC-135') icon = '../../../assets/images/topdown_tanker.png'; 
-          if (pos.aircraftModel == 'UH-1H') icon = '../../../assets/images/topdown_heli.png';
+          let icon = '../../../sim-dcs/assets/images/topdown_f18.png'; 
+          if (pos.aircraftModel == 'KC135MPRS' || pos.aircraftModel == 'KC-135') icon = '../../../sim-dcs/assets/images/topdown_tanker.png'; 
+          else if (pos.aircraftModel == 'UH-1H') icon = '../../../sim-dcs/assets/images/topdown_heli.png';
           
           let coalition = 'blue';
           if (pos.coalitionId == 1) coalition = 'red';

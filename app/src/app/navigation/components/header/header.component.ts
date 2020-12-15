@@ -1,4 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from 'src/app/app-material/components/confirm-dialog/confirm-dialog.component';
+import { SessionService } from 'src/app/session.service';
 
 @Component({
   selector: 'app-header',
@@ -6,15 +9,21 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
+
   @Output() public sidenavToggle = new EventEmitter();
   
-  constructor() { }
+  constructor(private dialog: MatDialog, private sessionService: SessionService) { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
   
   public onToggleSidenav = () => {
     this.sidenavToggle.emit();
   }
 
+  logout() {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) this.sessionService.logout();
+    });    
+  }
 }

@@ -1,6 +1,6 @@
 var net = require('dgram');
 const mongoose = require('mongoose');
-const Position = require('./models/Position');
+const Position = require('./schemas/Position');
 
 var udpserver = net.createSocket('udp4');
 

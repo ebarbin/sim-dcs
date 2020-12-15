@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --deploy-url /sim-dcs/",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
@@ -17,14 +17,15 @@
     "@angular/common": "~9.0.3",
     "@angular/compiler": "~9.0.3",
     "@angular/core": "~9.0.3",
+    "@angular/flex-layout": "^9.0.0-beta.29",
     "@angular/forms": "~9.0.3",
     "@angular/material": "^9.2.4",
     "@angular/platform-browser": "~9.0.3",
     "@angular/platform-browser-dynamic": "~9.0.3",
     "@angular/router": "~9.0.3",
-    "@angular/flex-layout": "^9.0.0-beta.29",
     "bootstrap": "4.1.1",
     "ngx-bootstrap": "^5.5.0",
+    "ngx-cookie-service": "^11.0.2",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"

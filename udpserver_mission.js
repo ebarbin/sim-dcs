@@ -1,9 +1,9 @@
 var net = require('dgram');
 var moment = require('moment');
 
-const Position = require('./models/Position');
-const Pilot = require('./models/Pilot');
-const AircraftModel = require('./models/AircraftModel');
+const Position = require('./schemas/Position');
+const Pilot = require('./schemas/Pilot');
+const AircraftModel = require('./schemas/AircraftModel');
 
 
 var udpserver = net.createSocket('udp4');
