@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { interval, Subscription } from 'rxjs';
 import { MarkerDetailDialogComponent } from 'src/app/app-material/components/marker-detail-dialog/marker-detail-dialog.component';
-import { PositionsService } from 'src/app/positions.service';
+import { PositionsService } from 'src/app/services/positions.service';
 
 @Component({
   selector: 'app-dcs-map',

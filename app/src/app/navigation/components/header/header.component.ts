@@ -1,7 +1,7 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from 'src/app/app-material/components/confirm-dialog/confirm-dialog.component';
-import { SessionService } from 'src/app/session.service';
+import { SessionService } from 'src/app/services/session.service';
 
 @Component({
   selector: 'app-header',
