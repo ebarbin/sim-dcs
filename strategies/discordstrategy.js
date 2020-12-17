@@ -18,10 +18,10 @@ passport.use(new DiscordStrategy({
     scope: ['identify', 'email', 'guilds']
 }, async (accessToken, refreshToken, profile, done) => {
     try {
-        const user = await User.findOne({id: profile.id});
+        const user = await User.findOne({discordId: profile.id});
         if (user) {
             user.token = accessToken;
-            const savedUser = user.save();
+            const savedUser = await user.save();
             done(null, savedUser);
         } else {
             const newUser = await User.create({ discordId: profile.id, userName: profile.username, email: profile.email, token: accessToken});

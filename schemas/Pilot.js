@@ -10,6 +10,7 @@ const pilotSchema = new Schema({
         }
     ],
     flightEvents : [{type: String, aircraftModel: String, weaponType: String, weaponName: String, date: Date}],
+    currentFlightEvents : [{type: String, aircraftModel: String, weaponType: String, weaponName: String, date: Date}],
     created: { 
         type: Date,
         default: Date.now
