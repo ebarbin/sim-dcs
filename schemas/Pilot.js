@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const pilotSchema = new Schema({
-    userName: String,
+    userName: {type: String},
+    user: { type: Schema.Types.ObjectId, ref: 'User' },
     stats: [
         { 
             ejections: Number, crashs:Number, deads: Number, takeOffs: Number, landings: Number, flightTime: Number, aircraftModel: String, 
