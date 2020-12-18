@@ -2,23 +2,23 @@
     <div class="marker-detail top-right" *ngIf="!hideLabel">
         <span 
             [style.color]="marker.coalition"
-            [style.font-size]="zoom - 5 +'px'">
+            [style.font-size]="zoom + 'px'">
             {{marker.userName}}
         </span>
     </div>
-    <img [src]="marker.icon" [ngStyle]="getImageStyle()">
+    <img [src]="marker.icon | assetsPipe" [ngStyle]="getImageStyle()">
     <div class="bottom-right" *ngIf="!hideLabel && showDetail">
         <div class="marker-detail" style="width: 100%;">
             <span 
             [style.color]="marker.coalition"
-            [style.font-size]="zoom - 5 +'px'">
+            [style.font-size]="zoom + 'px'">
             {{marker.altitude}} ft.
         </span>
         </div>
         <div class="marker-detail" style="width: 100%;">
             <span 
             [style.color]="marker.coalition"
-            [style.font-size]="zoom - 5 +'px'">
+            [style.font-size]="zoom + 'px'">
             {{marker.heading}} °
         </span>
         </div>

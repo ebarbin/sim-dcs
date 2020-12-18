@@ -1,5 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { PositionsService } from 'src/app/services/positions.service';
+import { Component, Input, OnInit  } from '@angular/core';
 
 @Component({
   selector: 'app-dcs-map-marker',
@@ -12,19 +11,20 @@ export class DcsMapMarkerComponent implements OnInit {
   @Input() zoom;
   @Input() hideLabel;
   @Input() showDetail;
-  
+
   constructor() { }
 
   ngOnInit(): void {}
 
   getImageStyle () {
+    console.log(this.zoom);
     let val = this.zoom;
     if (this.zoom > 14) {
-      val = this.zoom + 7; 
+      val = this.zoom * 3; 
     } else if (this.zoom <= 14 && this.zoom > 9) {
-      val = this.zoom + 20;
+      val = this.zoom * 4;
     } else if (this.zoom <= 9) {
-      val = this.zoom + 25;
+      val = this.zoom * 5;
     }
     
     return {
@@ -33,5 +33,14 @@ export class DcsMapMarkerComponent implements OnInit {
       'height' : val + 'px',
     }
   }
+
+  onMouseOver(infoWindow, $event: MouseEvent) {
+    console.log(1);
+    infoWindow.open();
+}
+
+onMouseOut(infoWindow, $event: MouseEvent) {
+    infoWindow.close();
+}
 
 }

@@ -5,7 +5,7 @@ import { HomeComponent } from './home/home.component';
 import { PilotsComponent } from './pilots/pilots.component';
 
 const routes: Routes = [
-  { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
+  { path: 'home', component: HomeComponent, canActivate: [] },
   { path: 'pilots', component: PilotsComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' }
 ];

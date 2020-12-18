@@ -22,38 +22,32 @@ passport.use(new DiscordStrategy({
         const user = await User.findOne({discordId: profile.id});
         if (user) {
             user.token = accessToken;
-            const savedUser = await user.save();
 
-            const pilot = await Pilot.findOne({userName: profile.username});
-            if (pilot) {
-                if (!pilot.user) {
-                    pilot.user = user;
+            if (!user.pilot) {           
+                const pilot = await Pilot.findOne({userName: profile.username});
+
+                if (!pilot) {
+                    pilot = await Pilot.create({userName: profile.username });
                     await pilot.save();
                 }
-            } else {
-                const newPilot = await Pilot.create({userName: profile.username, userId: user});
-                await newPilot.save();
+
+                savedUser.pilot = pilot;
             }
+
+            const savedUser = await user.save();
 
             done(null, savedUser);
         } else {
 
-            const newUser = await User.create({ discordId: profile.id, userName: profile.username, email: profile.email, token: accessToken});
-            const savedUser = await newUser.save();
-
-            //Check pilot
             const pilot = await Pilot.findOne({userName: profile.username});
-            if (pilot) {
-
-                if (!pilot.user) {
-                    pilot.user = savedUser;
-                    await pilot.save();
-                }
-
-            } else {
-                const newPilot = await Pilot.create({userName: profile.username, userId: savedUser});
-                await newPilot.save();
+            if (!pilot) {
+                pilot = await Pilot.create({userName: profile.username });
+                await pilot.save();
             }
+
+            const newUser = await User.create({ discordId: profile.id, userName: profile.username, email: profile.email, token: accessToken, pilot: pilot});
+
+            const savedUser = await newUser.save();
 
             done(null, savedUser);
         }

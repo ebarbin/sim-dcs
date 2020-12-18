@@ -1,14 +1,12 @@
 import { DOCUMENT } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { CookieService } from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SessionService {
 
-  constructor(@Inject(DOCUMENT) private document: Document, private cookieService: CookieService, private http: HttpClient) { }
+  constructor(@Inject(DOCUMENT) private document: Document) { }
 
   rootURL = '/api';
 

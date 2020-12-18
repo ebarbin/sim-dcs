@@ -10,7 +10,8 @@
     <agm-overlay *ngFor="let position of positions" [latitude]="position.lat" 
         [longitude]="position.lng"
         (markerClick)="markerClick(position)"> 
-            <app-dcs-map-marker [marker]="position" [zoom]="zoom" [hideLabel]="hideLabel" [showDetail]="showDetail"></app-dcs-map-marker>
+          <app-dcs-map-marker [marker]="position" [zoom]="zoom" [hideLabel]="hideLabel" [showDetail]="showDetail">
+          </app-dcs-map-marker>
     </agm-overlay>
 
   </agm-map>

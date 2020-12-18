@@ -15,8 +15,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { AgmOverlays } from "agm-overlays";
 import { DcsMapComponent } from './map/components/dcs-map/dcs-map.component';
 import { DcsMapMarkerComponent } from './map/components/dcs-map-marker/dcs-map-marker.component';
-import { PilotsComponent } from './pilots/pilots.component'
-import { TokenInterceptor } from './token.interceptor';
+import { PilotsComponent } from './pilots/pilots.component';
+import { AssetsPipe } from './assets.pipe';
 @NgModule({
   declarations: [
     AppComponent,
@@ -26,7 +26,8 @@ import { TokenInterceptor } from './token.interceptor';
     HeaderComponent,
     DcsMapComponent,
     DcsMapMarkerComponent,
-    PilotsComponent
+    PilotsComponent,
+    AssetsPipe
   ],
   imports: [
     BrowserModule,
@@ -39,13 +40,6 @@ import { TokenInterceptor } from './token.interceptor';
     AppMaterialModule,
     AgmOverlays,
     FlexLayoutModule
-  ],
-  providers: [
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: TokenInterceptor,
-      multi: true
-    }
   ],
   bootstrap: [AppComponent]
 })

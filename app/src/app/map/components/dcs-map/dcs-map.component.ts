@@ -1,6 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { interval, Subscription } from 'rxjs';
 import { MarkerDetailDialogComponent } from 'src/app/app-material/components/marker-detail-dialog/marker-detail-dialog.component';
 import { PositionsService } from 'src/app/services/positions.service';
 
@@ -9,13 +8,12 @@ import { PositionsService } from 'src/app/services/positions.service';
   templateUrl: './dcs-map.component.html',
   styleUrls: ['./dcs-map.component.css']
 })
-export class DcsMapComponent implements OnInit {
+export class DcsMapComponent implements OnInit, OnDestroy {
 
   @Input() map;
   @Input() hideLabel;
   @Input() showDetail;
-  
-  subs: Subscription;
+
   
   zoom = 9;
   streetViewControl = false;
@@ -27,11 +25,10 @@ export class DcsMapComponent implements OnInit {
   constructor(private matDialog:MatDialog, private positionsService: PositionsService) {}
 
   ngOnInit() {
-    this.subs = interval(5000).subscribe((func => {
-      this.positionsService.getPositions().subscribe((positions:any) => {
-        this.positions = positions;
-      });
-    }));
+    this.positionsService.initGetPositions();
+    this.positionsService.positionsChanged.subscribe(positions => {
+      this.positions = positions;
+    });
   }
 
   markerClick(marker) {
@@ -39,7 +36,7 @@ export class DcsMapComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.subs.unsubscribe();
+    this.positionsService.endGetPositions();
   }
 
 }
