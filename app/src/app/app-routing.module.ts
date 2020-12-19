@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './auth.guard';
-import { WrapperMapComponent } from './wrapper-map/wrapper-map.component';
+import { WrapperMapComponent } from './map/components/wrapper-map/wrapper-map.component';
 import { PilotsComponent } from './pilots/pilots.component';
 import { ProfileComponent } from './profile/profile.component';
 

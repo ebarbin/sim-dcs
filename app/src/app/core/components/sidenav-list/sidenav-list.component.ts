@@ -1,29 +1,32 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from 'src/app/app-material/components/confirm-dialog/confirm-dialog.component';
-import { SessionService } from 'src/app/services/session.service';
+import { SessionService } from 'src/app/common/services/session.service';
+import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
-  selector: 'app-header',
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.css']
+  selector: 'app-sidenav-list',
+  templateUrl: './sidenav-list.component.html',
+  styleUrls: ['./sidenav-list.component.css']
 })
-export class HeaderComponent implements OnInit {
+export class SidenavListComponent implements OnInit {
+  @Output() sidenavClose = new EventEmitter();
+ 
+  faCoffee = faSignOutAlt;
 
-  @Output() public sidenavToggle = new EventEmitter();
-  
   constructor(private dialog: MatDialog, private sessionService: SessionService) { }
-
-  ngOnInit(): void {}
-  
-  public onToggleSidenav = () => {
-    this.sidenavToggle.emit();
+ 
+  ngOnInit() {}
+ 
+  public onSidenavClose = () => {
+    this.sidenavClose.emit();
   }
-
+ 
   logout() {
     const dialogRef = this.dialog.open(ConfirmDialogComponent);
     dialogRef.afterClosed().subscribe(result => {
       if (result) this.sessionService.logout();
     });    
   }
+
 }

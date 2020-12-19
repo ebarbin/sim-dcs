@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MarkerDetailDialogComponent } from 'src/app/app-material/components/marker-detail-dialog/marker-detail-dialog.component';
-import { PositionsService } from 'src/app/services/positions.service';
+import { PositionsService } from 'src/app/common/services/positions.service';
 
 @Component({
   selector: 'app-dcs-map',

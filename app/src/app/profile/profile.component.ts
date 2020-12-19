@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { PilotsService } from '../services/pilots.service';
-import { SessionService } from '../services/session.service';
+import { PilotsService } from '../common/services/pilots.service';
+import { SessionService } from '../common/services/session.service';
 
 @Component({
   selector: 'app-profile',

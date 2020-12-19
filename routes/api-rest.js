@@ -1,5 +1,6 @@
 const express = require('express');
 const apiRest = express.Router();
+const ObjectId = require('mongoose').Types.ObjectId; 
 
 const Position = require('../schemas/Position');
 const Pilot = require('../schemas/Pilot');
@@ -10,9 +11,15 @@ apiRest.get('/positions', (req, res) => {
     })
 });
 
-apiRest.get('/pilots', (req, res) => {
+apiRest.get('/pilot', (req, res) => {
     Pilot.find().then((positions) => {
         res.json(positions);
+    });
+})
+
+apiRest.get('/pilot/:id', (req, res) => {
+    Pilot.findOne({_id: new ObjectId(req.params.id)}).then((pil) => {
+        res.json(pil);
     });
 })
 
