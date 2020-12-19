@@ -14,6 +14,7 @@ import { MatTableModule } from '@angular/material/table';
 
 import { MarkerDetailDialogComponent } from './components/marker-detail-dialog/marker-detail-dialog.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
+import { MatCardModule } from '@angular/material/card';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
     MatSidenavModule,
     MatSelectModule,
     MatCheckboxModule,
-    MatTableModule
+    MatTableModule,
+    MatCardModule
   ],
   exports: [
     MatDialogModule,
@@ -47,7 +49,8 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
     MatSidenavModule,
     MatSelectModule,
     MatCheckboxModule,
-    MatTableModule
+    MatTableModule,
+    MatCardModule
   ],
   entryComponents: [
     ConfirmDialogComponent,
