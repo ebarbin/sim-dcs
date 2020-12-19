@@ -1,0 +1,23 @@
+<section fxLayout="column" fxLayoutAlign="space-around">
+
+  <section class="map-options" fxLayout="row" fxLayoutAlign="space-around">
+    <mat-form-field appearance="fill" class="width-half">
+      <mat-label>Mapa</mat-label>
+      <mat-select [(value)]="selectedMap">
+          <mat-option *ngFor="let map of maps" [value]="map">
+          {{map.name}}
+          </mat-option>
+      </mat-select>
+    </mat-form-field>
+    
+    <section class="width-half" style="margin-left:5px;">
+      <mat-checkbox [(ngModel)]="hideLabel" style="margin-left:5px;">Ocultar etiquetas</mat-checkbox>
+      <mat-checkbox [(ngModel)]="showDetail" style="margin-left:5px;">Mostrar detalle</mat-checkbox>
+    </section>
+  </section>
+
+  <div id="scrollable-container"> 
+      <app-dcs-map [map]="selectedMap" [hideLabel]="hideLabel" [showDetail]="showDetail"></app-dcs-map>
+  </div>
+
+</section>

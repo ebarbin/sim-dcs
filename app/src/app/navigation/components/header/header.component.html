@@ -1,7 +1,7 @@
 <mat-toolbar color="primary" class="sticky">
     <div fxHide.gt-xs>
         <button mat-icon-button (click)="onToggleSidenav()">
-            <mat-icon>menu</mat-icon>
+            <app-icon type="faBars"></app-icon>
         </button>
     </div>
     <div>
@@ -12,13 +12,16 @@
     <div fxFlex fxLayout fxLayoutAlign="end" fxHide.xs>
         <ul fxLayout fxLayoutGap="15px" class="navigation-items">
             <li>
-                <a routerLink="/home">Map</a>
+                <a routerLink="/home" routerLinkActive="active"><app-icon type="faMap"></app-icon> Mapa</a>
             </li>
             <li>
-                <a routerLink="/pilots">Pilots</a>
+                <a routerLink="/profile" routerLinkActive="active"><app-icon type="faIdCard"></app-icon> Mi Perfil</a>
             </li>
             <li>
-                <a (click)="logout()"><mat-icon class="logout">logout</mat-icon></a>
+                <a routerLink="/pilots" routerLinkActive="active"><app-icon type="faUserFriends"></app-icon> Pilotos</a>
+            </li>
+            <li>
+                <a class="logout" (click)="logout()"><app-icon type="faSignOutAlt"></app-icon></a>
             </li>
         </ul>
     </div>

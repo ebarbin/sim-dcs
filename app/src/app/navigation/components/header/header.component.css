@@ -1,10 +1,10 @@
 a {
     text-decoration: none;
-    color: white;
+    color: grey;
 }
  
 a:hover, a:active{
-    color: lightgray;
+    color: whitesmoke;
 }
  
 .navigation-items{
@@ -30,7 +30,12 @@ mat-toolbar {
 }
 
 .logout {
+    color: grey;
     margin-left: 10px;
     margin-top: 4px;
     cursor: pointer;
+}
+
+.active {
+    color: whitesmoke;
 }

@@ -18,20 +18,21 @@ passport.use(new DiscordStrategy({
     callbackURL: process.env.DISCORD_CLIENT_REDIRECT,
     scope: ['identify', 'email', 'guilds']
 }, async (accessToken, refreshToken, profile, done) => {
+
     try {
         const user = await User.findOne({discordId: profile.id});
         if (user) {
             user.token = accessToken;
-
+            user.avatar = 'https://cdn.discordapp.com/avatars/' + profile.id + '/' + profile.avatar + '.jpg';
             if (!user.pilot) {           
-                const pilot = await Pilot.findOne({userName: profile.username});
+                let pilot = await Pilot.findOne({ userName: profile.username });
 
                 if (!pilot) {
-                    pilot = await Pilot.create({userName: profile.username });
+                    pilot = await Pilot.create({userName: profile.username, flightEvents: [], currentFlightEvents: [] });
                     await pilot.save();
                 }
 
-                savedUser.pilot = pilot;
+                user.pilot = pilot;
             }
 
             const savedUser = await user.save();
@@ -39,13 +40,20 @@ passport.use(new DiscordStrategy({
             done(null, savedUser);
         } else {
 
-            const pilot = await Pilot.findOne({userName: profile.username});
+            let pilot = await Pilot.findOne({userName: profile.username});
             if (!pilot) {
-                pilot = await Pilot.create({userName: profile.username });
+                pilot = await Pilot.create({userName: profile.username, flightEvents: [], currentFlightEvents: []});
                 await pilot.save();
             }
 
-            const newUser = await User.create({ discordId: profile.id, userName: profile.username, email: profile.email, token: accessToken, pilot: pilot});
+            const newUser = await User.create({ 
+                discordId: profile.id, 
+                userName: profile.username, 
+                email: profile.email, 
+                avatar: 'https://cdn.discordapp.com/avatars/' + profile.id + '/' + profile.avatar + '.jpg',
+                token: accessToken, 
+                pilot: pilot
+            });
 
             const savedUser = await newUser.save();
 

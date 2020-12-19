@@ -1,15 +1,17 @@
 import { Pipe, PipeTransform } from '@angular/core';
-
+import { environment } from '../environments/environment';
 @Pipe({
   name: 'assetsPipe'
 })
 export class AssetsPipe implements PipeTransform {
 
-  //path = '../../../sim-dcs/assets/images/';
-  path = '../../../assets/images/';
-
   transform(value: unknown, ...args: unknown[]): unknown {
-    return this.path + value;
+    let path = '../../../sim-dcs/assets/images/';
+    if (!environment.production) {
+      path = '../../../assets/images/';
+    }
+
+    return path + value;
   }
 
 }

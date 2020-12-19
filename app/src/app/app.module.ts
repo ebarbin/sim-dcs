@@ -7,7 +7,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AgmCoreModule } from '@agm/core';
 import { AppMaterialModule } from './app-material/app-material.module';
-import { HomeComponent } from './home/home.component';
+import { WrapperMapComponent } from './wrapper-map/wrapper-map.component';
 import { LayoutComponent } from './layout/layout.component';
 import { SidenavListComponent } from './navigation/components/sidenav-list/sidenav-list.component';
 import { HeaderComponent } from './navigation/components/header/header.component';
@@ -17,17 +17,22 @@ import { DcsMapComponent } from './map/components/dcs-map/dcs-map.component';
 import { DcsMapMarkerComponent } from './map/components/dcs-map-marker/dcs-map-marker.component';
 import { PilotsComponent } from './pilots/pilots.component';
 import { AssetsPipe } from './assets.pipe';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { IconComponent } from './components/icon/icon.component';
+import { ProfileComponent } from './profile/profile.component';
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
+    WrapperMapComponent,
     LayoutComponent,
     SidenavListComponent,
     HeaderComponent,
     DcsMapComponent,
     DcsMapMarkerComponent,
     PilotsComponent,
-    AssetsPipe
+    AssetsPipe,
+    IconComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
@@ -39,7 +44,8 @@ import { AssetsPipe } from './assets.pipe';
     HttpClientModule,
     AppMaterialModule,
     AgmOverlays,
-    FlexLayoutModule
+    FlexLayoutModule,
+    FontAwesomeModule
   ],
   bootstrap: [AppComponent]
 })

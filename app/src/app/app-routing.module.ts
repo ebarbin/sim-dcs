@@ -1,12 +1,14 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './auth.guard';
-import { HomeComponent } from './home/home.component';
+import { WrapperMapComponent } from './wrapper-map/wrapper-map.component';
 import { PilotsComponent } from './pilots/pilots.component';
+import { ProfileComponent } from './profile/profile.component';
 
 const routes: Routes = [
-  { path: 'home', component: HomeComponent, canActivate: [] },
-  { path: 'pilots', component: PilotsComponent },
+  { path: 'home', component: WrapperMapComponent, canActivate: [AuthGuard] },
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
+  { path: 'pilots', component: PilotsComponent, canActivate: [AuthGuard] },
   { path: '', redirectTo: '/home', pathMatch: 'full' }
 ];
 

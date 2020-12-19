@@ -6,6 +6,7 @@ const userSchema = new Schema({
     userName: String,
     email: String,
     token: String,
+    avatar: String,
     pilot: { type: Schema.Types.ObjectId, ref: 'Pilot' },
     created: { 
         type: Date,
