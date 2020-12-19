@@ -16,7 +16,7 @@ import { AgmOverlays } from "agm-overlays";
 import { DcsMapComponent } from './map/components/dcs-map/dcs-map.component';
 import { DcsMapMarkerComponent } from './map/components/dcs-map-marker/dcs-map-marker.component';
 import { PilotsComponent } from './pilots/pilots.component';
-import { AssetsPipe } from './assets.pipe';
+import { AssetsPipe } from './pipes/assets.pipe';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { IconComponent } from './components/icon/icon.component';
 import { ProfileComponent } from './profile/profile.component';

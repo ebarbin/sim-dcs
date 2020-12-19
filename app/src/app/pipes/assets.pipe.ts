@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { environment } from '../environments/environment';
+import { environment } from '../../environments/environment';
 @Pipe({
   name: 'assetsPipe'
 })
@@ -10,7 +10,6 @@ export class AssetsPipe implements PipeTransform {
     if (!environment.production) {
       path = '../../../assets/images/';
     }
-
     return path + value;
   }
 
