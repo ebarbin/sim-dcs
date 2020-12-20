@@ -1,4 +1,5 @@
 import { Component, Input, OnInit  } from '@angular/core';
+import { PilotsService } from 'src/app/common/services/pilots.service';
 
 @Component({
   selector: 'app-dcs-map-marker',
@@ -12,12 +13,13 @@ export class DcsMapMarkerComponent implements OnInit {
   @Input() hideLabel;
   @Input() showDetail;
 
+  weight = 'normal';
   constructor() { }
 
   ngOnInit(): void {}
 
   getImageStyle () {
-    console.log(this.zoom);
+
     let val = this.zoom;
     if (this.zoom > 14) {
       val = this.zoom * 3; 

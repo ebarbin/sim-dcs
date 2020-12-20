@@ -20,6 +20,7 @@ import { AssetsPipe } from './common/pipes/assets.pipe';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { IconComponent } from './common/components/icon/icon.component';
 import { ProfileComponent } from './profile/profile.component';
+import { TruncateTextPipe } from './common/pipes/truncate-text.pipe';
 @NgModule({
   declarations: [
     AppComponent,
@@ -32,7 +33,8 @@ import { ProfileComponent } from './profile/profile.component';
     PilotsComponent,
     AssetsPipe,
     IconComponent,
-    ProfileComponent
+    ProfileComponent,
+    TruncateTextPipe
   ],
   imports: [
     BrowserModule,

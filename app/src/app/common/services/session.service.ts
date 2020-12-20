@@ -12,9 +12,7 @@ export class SessionService {
   rootURL = '/api';
   user;
 
-  getUser() {
-    return this.user;
-  }
+  getUser() { return this.user; }
   
   isAuthenticated() {
 
@@ -41,9 +39,7 @@ export class SessionService {
       };
 
       return true;
-
     }
-
   }
 
   logout() {

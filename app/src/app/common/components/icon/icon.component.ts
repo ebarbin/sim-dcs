@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { faBars, faIdCard, faMap, faUserFriends, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { faBullseye, faBars, faIdCard, faMap, faUserFriends, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-icon',
@@ -30,6 +30,8 @@ export class IconComponent implements OnInit {
       case 'faBars':
         this.icon = faBars;
         break;
+      case 'faBullseye':
+        this.icon = faBullseye;
     }
   }
 

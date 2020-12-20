@@ -13,7 +13,7 @@ export class ProfileComponent implements OnInit {
   constructor(private pilotsService: PilotsService) { }
 
   ngOnInit(): void {
-    this.pilotsService.getPilot().subscribe( (res) => {
+    this.pilotsService.getLoggedInPilot().subscribe( (res) => {
       console.log(res);
       this.profile = {
         user: res.user

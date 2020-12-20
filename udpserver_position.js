@@ -25,7 +25,7 @@ udpserver.on('message', (msg, rinfo) => {
     //10 alt
 
     const data = msg.toString('utf-8').split(',');
-
+    
     let heading = data[5];
     if (heading < 0) heading = heading + 2 * Math.PI;
     else heading = heading * 180 / Math.PI;
@@ -44,21 +44,21 @@ udpserver.on('message', (msg, rinfo) => {
         altitude: Math.round(data[10] * 3.28084),
     });
 
-    Position.find({key: newPosition.key}).then((positions) => {
-        const lastPosition = positions[0];
-        if (positions.length == 0) {
+    Position.findOne({key: newPosition.key}).then((position) => {
+
+        if (!position) {
 
             Position.deleteMany({userName: newPosition.userName}).then(() => {
-                newPosition.save().then(result => console.log('Position added')).catch(err => console.log(err));
+                newPosition.save().then(result => console.log('Position added for: ' + newPosition.userName)).catch(err => console.log(err));
             });
             
         } else {
 
-            lastPosition.lat = newPosition.lat;
-            lastPosition.lng = newPosition.lng;
-            lastPosition.altitude = newPosition.altitude;
-            lastPosition.heading = newPosition.heading;
-            lastPosition.save().then(result => console.log('Position updated')).catch(err => console.log(err));
+            position.lat = newPosition.lat;
+            position.lng = newPosition.lng;
+            position.altitude = newPosition.altitude;
+            position.heading = newPosition.heading;
+            position.save().then(result => console.log('Position updated for: ' + newPosition.userName)).catch(err => console.log(err));
             
         }
     })

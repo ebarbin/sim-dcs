@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { PilotsService } from 'src/app/common/services/pilots.service';
 
 @Component({
   selector: 'app-wrapper-map',
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class WrapperMapComponent implements OnInit {
 
-  constructor() {}
+  constructor(private pilotService: PilotsService) {}
 
   ngOnInit() {}
 

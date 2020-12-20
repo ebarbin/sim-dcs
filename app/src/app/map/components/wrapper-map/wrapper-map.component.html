@@ -1,6 +1,7 @@
 <section fxLayout="column" fxLayoutAlign="space-around">
 
   <section class="map-options" fxLayout="row" fxLayoutAlign="space-around">
+    
     <mat-form-field appearance="fill" class="width-half">
       <mat-label>Mapa</mat-label>
       <mat-select [(value)]="selectedMap">
@@ -14,6 +15,7 @@
       <mat-checkbox [(ngModel)]="hideLabel" style="margin-left:5px;">Ocultar etiquetas</mat-checkbox>
       <mat-checkbox [(ngModel)]="showDetail" style="margin-left:5px;">Mostrar detalle</mat-checkbox>
     </section>
+
   </section>
 
   <div id="scrollable-container"> 

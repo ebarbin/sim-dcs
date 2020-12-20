@@ -14,7 +14,7 @@ udpserver.on('error', (err) => {
 
 udpserver.on('message', (msg, rinfo) => {
     
-    console.log(msg + ' from ' + rinfo.address + ':' + rinfo.port);
+    //console.log(msg + ' from ' + rinfo.address + ':' + rinfo.port);
 
     const data = msg.toString('utf-8').split(',');
     const eventType = data[1];
@@ -66,6 +66,10 @@ udpserver.on('message', (msg, rinfo) => {
         } else if (eventType == 'S_EVENT_TAKEOFF') {
 
             let stat = pilot.stats.find(s => s.aircraftModel == aircraftModel);
+            if (!stat) {
+                stat = {crashs:0, deads: 0, takeOffs: 0, landings: 0, flightTime: 0, aircraftModel: aircraftModel, weaponStats: []};
+                pilot.stats.push(stat);
+            }
             stat.takeOffs++;
 
             pilot.flightEvents.push({eventType:'S_EVENT_TAKEOFF', aircraftModel: aircraftModel, date: new Date()});
@@ -82,6 +86,10 @@ udpserver.on('message', (msg, rinfo) => {
             //Flight Time
             let currentEvents = pilot.currentFlightEvents.filter(fe => fe.aircraftModel == aircraftModel);
             let stat = pilot.stats.find(s => s.aircraftModel == aircraftModel);
+            if (!stat) {
+                stat = {crashs:0, deads: 0, takeOffs: 0, landings: 0, flightTime: 0, aircraftModel: aircraftModel, weaponStats: []};
+                pilot.stats.push(stat);
+            }
 
             let tkEvent = currentEvents.find(e => e.eventType == 'S_EVENT_TAKEOFF' || e.eventType == 'S_EVENT_BIRTH' || e.eventType == 'S_EVENT_BIRTH_AIRBORNE');
 
@@ -112,6 +120,11 @@ udpserver.on('message', (msg, rinfo) => {
             pilot.flightEvents.push(event);
 
             let stat = pilot.stats.find(s => s.aircraftModel == aircraftModel);
+            if (!stat) {
+                stat = {crashs:0, deads: 0, takeOffs: 0, landings: 0, flightTime: 0, aircraftModel: aircraftModel, weaponStats: []};
+                pilot.stats.push(stat);
+            }
+
             let weaponStat = stat.weaponStats.find(ws => ws.weaponName == weaponName && ws.weaponType == weaponType);
             if (!weaponStat) {
                 weaponStat = { weaponType: weaponType, weaponName: weaponName, fireTime: 1, hitTime: 0 };
@@ -132,6 +145,10 @@ udpserver.on('message', (msg, rinfo) => {
             pilot.flightEvents.push(event);
 
             let stat = pilot.stats.find(s => s.aircraftModel == aircraftModel);
+            if (!stat) {
+                stat = {crashs:0, deads: 0, takeOffs: 0, landings: 0, flightTime: 0, aircraftModel: aircraftModel, weaponStats: []};
+                pilot.stats.push(stat);
+            }
             let weaponStat = stat.weaponStats.find(ws => ws.weaponName == weaponName && ws.weaponType == weaponType);
             weaponStat.hitTime++;
 
@@ -142,6 +159,10 @@ udpserver.on('message', (msg, rinfo) => {
         } else if (eventType == 'S_EVENT_PILOT_DEAD') {
 
             let stat = pilot.stats.find(s => s.aircraftModel == aircraftModel);
+            if (!stat) {
+                stat = {crashs:0, deads: 0, takeOffs: 0, landings: 0, flightTime: 0, aircraftModel: aircraftModel, weaponStats: []};
+                pilot.stats.push(stat);
+            }
             stat.deads++;
 
             pilot.currentFlightEvents = [];
@@ -156,6 +177,10 @@ udpserver.on('message', (msg, rinfo) => {
         } else if (eventType == 'S_EVENT_CRASH') {
 
             let stat = pilot.stats.find(s => s.aircraftModel == aircraftModel);
+            if (!stat) {
+                stat = {crashs:0, deads: 0, takeOffs: 0, landings: 0, flightTime: 0, aircraftModel: aircraftModel, weaponStats: []};
+                pilot.stats.push(stat);
+            }
             stat.crashs++;
 
             pilot.currentFlightEvents = [];
@@ -170,6 +195,10 @@ udpserver.on('message', (msg, rinfo) => {
         } else if (eventType == 'S_EVENT_EJECTION') {
 
             let stat = pilot.stats.find(s => s.aircraftModel == aircraftModel);
+            if (!stat) {
+                stat = {crashs:0, deads: 0, takeOffs: 0, landings: 0, flightTime: 0, aircraftModel: aircraftModel, weaponStats: []};
+                pilot.stats.push(stat);
+            }
             stat.ejections++;
 
             pilot.currentFlightEvents = [];

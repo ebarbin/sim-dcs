@@ -1,26 +1,18 @@
 <div class="container">
-    <div class="marker-detail top-right" *ngIf="!hideLabel">
+    <div class="marker-detail" *ngIf="!hideLabel">
         <span 
             [style.color]="marker.coalition"
-            [style.font-size]="zoom + 'px'">
-            {{marker.userName}}
+            [style.font-size]="zoom + 'px'"
+            [style.font-weight]="marker.isMe ? 'bold' : 'normal'">
+            {{ marker.userName | truncateText:[15, '...']}}
         </span>
     </div>
     <img [src]="marker.icon | assetsPipe" [ngStyle]="getImageStyle()">
-    <div class="bottom-right" *ngIf="!hideLabel && showDetail">
-        <div class="marker-detail" style="width: 100%;">
-            <span 
+    <div class="marker-detail" *ngIf="!hideLabel && showDetail">
+        <span 
             [style.color]="marker.coalition"
             [style.font-size]="zoom + 'px'">
-            {{marker.altitude}} ft.
+            {{ marker.altitude }} ft. / {{ marker.heading }} ° 
         </span>
-        </div>
-        <div class="marker-detail" style="width: 100%;">
-            <span 
-            [style.color]="marker.coalition"
-            [style.font-size]="zoom + 'px'">
-            {{marker.heading}} °
-        </span>
-        </div>
     </div>
 </div>
