@@ -18,7 +18,6 @@ import { DcsMapMarkerComponent } from './map/components/dcs-map-marker/dcs-map-m
 import { PilotsComponent } from './pilots/pilots.component';
 import { AssetsPathFixPipe } from './common/pipes/assets-path-fix.pipe';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { IconComponent } from './common/components/icon/icon.component';
 import { ProfileComponent } from './profile/components/profile/profile.component';
 import { TruncateTextPipe } from './common/pipes/truncate-text.pipe';
 import { MissionEventComponent } from './profile/components/mission-event/mission-event.component';
@@ -26,6 +25,7 @@ import { EventToImgPipe } from './common/pipes/event-to-img.pipe';
 import { EventTranslatePipe } from './common/pipes/event-translate.pipe';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { AircraftToImgPipe } from './common/pipes/aircraft-to-img.pipe';
+import { IconPipe } from './common/pipes/icon.pipe';
 @NgModule({
   declarations: [
     AppComponent,
@@ -37,13 +37,13 @@ import { AircraftToImgPipe } from './common/pipes/aircraft-to-img.pipe';
     DcsMapMarkerComponent,
     PilotsComponent,
     AssetsPathFixPipe,
-    IconComponent,
     ProfileComponent,
     TruncateTextPipe,
     MissionEventComponent,
     EventToImgPipe,
     EventTranslatePipe,
-    AircraftToImgPipe
+    AircraftToImgPipe,
+    IconPipe
   ],
   imports: [
     BrowserModule,

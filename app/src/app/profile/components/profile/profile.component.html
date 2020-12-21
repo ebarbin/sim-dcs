@@ -1,32 +1,42 @@
 <mat-card class="example-card" *ngIf="profile">
     
   <mat-card-header>
-      <img mat-card-avatar [src]="profile.user.avatar" alt="Photo of a Shiba Inu">
+      <img mat-card-avatar [src]="profile.user.avatar">
       <mat-card-title>{{profile.user.userName}}</mat-card-title>
       <mat-card-subtitle>{{profile.user.email}}</mat-card-subtitle>
-      <mat-card-subtitle><h1>Logbook</h1></mat-card-subtitle>
     </mat-card-header>
 
-    <mat-card-content>
-      <mat-accordion class="example-headers-align" multi>
-        <mat-expansion-panel class="date-event" *ngFor="let tle of timeLineEvents">
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              {{tle.date | date:'dd/MM/yyyy'}}
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          
-          <mat-list role="list">
-            <mat-list-item *ngFor="let ev of tle.events" role="listitem">
-              <app-mission-event [event]="ev"></app-mission-event>
-            </mat-list-item>
-          </mat-list>
 
-        </mat-expansion-panel>
-      </mat-accordion>
+    <mat-card-content>
+
+      <mat-tab-group mat-align-tabs="start">
+        <mat-tab label="Logbook">
+          <div class="tab-content">
+            <mat-accordion class="example-headers-align" multi>
+              <mat-expansion-panel class="date-event" *ngFor="let tle of timeLineEvents">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    {{tle.date | date:'dd/MM/yyyy'}}
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <mat-list role="list">
+                  <mat-list-item *ngFor="let ev of tle.events" role="listitem">
+                    <app-mission-event [event]="ev"></app-mission-event>
+                  </mat-list-item>
+                </mat-list>
+              </mat-expansion-panel>
+            </mat-accordion>
+          </div>
+        </mat-tab>
+        <mat-tab label="Estadísticas">
+          <div class="tab-content">
+            Contenido
+          </div>
+        </mat-tab>
+      </mat-tab-group>
     </mat-card-content>
-    <mat-card-actions>
+    <!--<mat-card-actions>
       <button mat-button>Do</button>
       <button mat-button>Do</button>
-    </mat-card-actions>
+    </mat-card-actions>-->
   </mat-card>
