@@ -1,4 +1,6 @@
 <span>
+    <img class="event-img" [src]="event.aircraftModel | aircraftToImgPipe | assetsPathFixPipe"> &nbsp;
+    <strong>{{event.aircraftModel}}</strong>
     {{event.date | date: 'HH:mm:ss'}}
     <app-icon [type]="event.eventType | eventToImgPipe"></app-icon>
     {{event.eventType | eventTranslate}}

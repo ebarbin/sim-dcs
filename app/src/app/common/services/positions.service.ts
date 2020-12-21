@@ -41,7 +41,6 @@ export class PositionsService {
 
   private getPositions(profile) {
     
-    
       return this.http.get(this.rootURL + '/positions').pipe(
         map((positions:any) => {
           return positions.map(pos => {
@@ -53,12 +52,11 @@ export class PositionsService {
             let coalition = 'blue';
             if (pos.coalitionId == 1) coalition = 'red';
   
-            let isMe = false;
-            if (profile.user.userName == pos.userName) {
+            let isMe = profile.user.userName == pos.userName;
+            /*if (profile.user.userName == pos.userName) {
               isMe = true;
-              console.log(pos.aircraftModel);
               this.pilotService.setMyPosition({lat: pos.lat, lng: pos.lng, });
-            }
+            }*/
 
             return {
               isMe: isMe,
@@ -66,10 +64,9 @@ export class PositionsService {
               coalition: coalition,
               lat: pos.lat, lng: pos.lng, 
               userName: pos.userName, 
-              icon: icon,
+              aircraftModel: pos.aircraftModel,
               heading: pos.heading,
-              altitude: pos.altitude,
-              aircraftModel: pos.aircraftModel
+              altitude: pos.altitude
             }
           });
         })  

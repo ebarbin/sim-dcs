@@ -24,6 +24,8 @@ import { TruncateTextPipe } from './common/pipes/truncate-text.pipe';
 import { MissionEventComponent } from './profile/components/mission-event/mission-event.component';
 import { EventToImgPipe } from './common/pipes/event-to-img.pipe';
 import { EventTranslatePipe } from './common/pipes/event-translate.pipe';
+import { AuthInterceptor } from './core/interceptors/auth.interceptor';
+import { AircraftToImgPipe } from './common/pipes/aircraft-to-img.pipe';
 @NgModule({
   declarations: [
     AppComponent,
@@ -40,7 +42,8 @@ import { EventTranslatePipe } from './common/pipes/event-translate.pipe';
     TruncateTextPipe,
     MissionEventComponent,
     EventToImgPipe,
-    EventTranslatePipe
+    EventTranslatePipe,
+    AircraftToImgPipe
   ],
   imports: [
     BrowserModule,
@@ -54,6 +57,9 @@ import { EventTranslatePipe } from './common/pipes/event-translate.pipe';
     AgmOverlays,
     FlexLayoutModule,
     FontAwesomeModule
+  ],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })
