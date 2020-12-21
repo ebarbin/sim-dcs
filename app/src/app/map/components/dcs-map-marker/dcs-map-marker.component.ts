@@ -1,5 +1,4 @@
 import { Component, Input, OnInit  } from '@angular/core';
-import { PilotsService } from 'src/app/common/services/pilots.service';
 
 @Component({
   selector: 'app-dcs-map-marker',

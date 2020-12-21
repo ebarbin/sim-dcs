@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './auth.guard';
 import { WrapperMapComponent } from './map/components/wrapper-map/wrapper-map.component';
 import { PilotsComponent } from './pilots/pilots.component';
-import { ProfileComponent } from './profile/profile.component';
+import { ProfileComponent } from './profile/components/profile/profile.component';
 
 const routes: Routes = [
   { path: 'home', component: WrapperMapComponent, canActivate: [AuthGuard] },

@@ -1,0 +1,5 @@
+<span>
+    {{event.date | date: 'HH:mm:ss'}}
+    <app-icon [type]="event.eventType | eventToImgPipe"></app-icon>
+    {{event.eventType | eventTranslate}}
+</span>

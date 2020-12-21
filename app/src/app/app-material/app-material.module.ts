@@ -11,7 +11,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTableModule } from '@angular/material/table';
-
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MarkerDetailDialogComponent } from './components/marker-detail-dialog/marker-detail-dialog.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { MatCardModule } from '@angular/material/card';
@@ -35,7 +35,8 @@ import { MatCardModule } from '@angular/material/card';
     MatSelectModule,
     MatCheckboxModule,
     MatTableModule,
-    MatCardModule
+    MatCardModule,
+    MatExpansionModule
   ],
   exports: [
     MatDialogModule,
@@ -50,7 +51,8 @@ import { MatCardModule } from '@angular/material/card';
     MatSelectModule,
     MatCheckboxModule,
     MatTableModule,
-    MatCardModule
+    MatCardModule,
+    MatExpansionModule
   ],
   entryComponents: [
     ConfirmDialogComponent,

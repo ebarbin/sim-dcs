@@ -6,7 +6,7 @@
     </div>
     <div>
         <a routerLink="/home">
-            <img width="40" [src]="'DCS_World_logo.png' | assetsPipe">
+            <img width="40" [src]="'DCS_World_logo.png' | assetsPathFixPipe">
         </a>
     </div>
     <div fxFlex fxLayout fxLayoutAlign="end" fxHide.xs>
@@ -15,7 +15,7 @@
                 <a routerLink="/home" routerLinkActive="active"><app-icon type="faMap"></app-icon> Mapa</a>
             </li>
             <li>
-                <a routerLink="/profile" routerLinkActive="active"><app-icon type="faIdCard"></app-icon> Mi Perfil</a>
+                <a routerLink="/profile" routerLinkActive="active"><app-icon type="faIdCard"></app-icon> Logbook</a>
             </li>
             <li>
                 <a routerLink="/pilots" routerLinkActive="active"><app-icon type="faUserFriends"></app-icon> Pilotos</a>

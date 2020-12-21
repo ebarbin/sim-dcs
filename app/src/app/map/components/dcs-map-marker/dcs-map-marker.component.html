@@ -7,7 +7,7 @@
             {{ marker.userName | truncateText:[15, '...']}}
         </span>
     </div>
-    <img [src]="marker.icon | assetsPipe" [ngStyle]="getImageStyle()">
+    <img [src]="marker.icon | assetsPathFixPipe" [ngStyle]="getImageStyle()">
     <div class="marker-detail" *ngIf="!hideLabel && showDetail">
         <span 
             [style.color]="marker.coalition"

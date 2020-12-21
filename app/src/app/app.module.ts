@@ -16,11 +16,14 @@ import { AgmOverlays } from "agm-overlays";
 import { DcsMapComponent } from './map/components/dcs-map/dcs-map.component';
 import { DcsMapMarkerComponent } from './map/components/dcs-map-marker/dcs-map-marker.component';
 import { PilotsComponent } from './pilots/pilots.component';
-import { AssetsPipe } from './common/pipes/assets.pipe';
+import { AssetsPathFixPipe } from './common/pipes/assets-path-fix.pipe';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { IconComponent } from './common/components/icon/icon.component';
-import { ProfileComponent } from './profile/profile.component';
+import { ProfileComponent } from './profile/components/profile/profile.component';
 import { TruncateTextPipe } from './common/pipes/truncate-text.pipe';
+import { MissionEventComponent } from './profile/components/mission-event/mission-event.component';
+import { EventToImgPipe } from './common/pipes/event-to-img.pipe';
+import { EventTranslatePipe } from './common/pipes/event-translate.pipe';
 @NgModule({
   declarations: [
     AppComponent,
@@ -31,10 +34,13 @@ import { TruncateTextPipe } from './common/pipes/truncate-text.pipe';
     DcsMapComponent,
     DcsMapMarkerComponent,
     PilotsComponent,
-    AssetsPipe,
+    AssetsPathFixPipe,
     IconComponent,
     ProfileComponent,
-    TruncateTextPipe
+    TruncateTextPipe,
+    MissionEventComponent,
+    EventToImgPipe,
+    EventTranslatePipe
   ],
   imports: [
     BrowserModule,
