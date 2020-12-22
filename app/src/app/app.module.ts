@@ -26,6 +26,9 @@ import { EventTranslatePipe } from './common/pipes/event-translate.pipe';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { AircraftToImgPipe } from './common/pipes/aircraft-to-img.pipe';
 import { IconPipe } from './common/pipes/icon.pipe';
+import { LogbookComponent } from './profile/components/logbook/logbook.component';
+import { StatsComponent } from './profile/components/stats/stats.component';
+import { SortByPipe } from './common/pipes/sort-by.pipe';
 @NgModule({
   declarations: [
     AppComponent,
@@ -43,7 +46,10 @@ import { IconPipe } from './common/pipes/icon.pipe';
     EventToImgPipe,
     EventTranslatePipe,
     AircraftToImgPipe,
-    IconPipe
+    IconPipe,
+    LogbookComponent,
+    StatsComponent,
+    SortByPipe
   ],
   imports: [
     BrowserModule,

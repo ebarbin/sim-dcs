@@ -11,8 +11,6 @@ export class MissionEventComponent implements OnInit {
   
   constructor() { }
 
-  ngOnInit(): void {
-    console.log(this.event);
-  }
+  ngOnInit(): void {}
 
 }

@@ -1,0 +1,14 @@
+<mat-accordion class="example-headers-align" multi>
+    <mat-expansion-panel [expanded]="first" class="date-event" *ngFor="let tle of timeLineEvents; first as first">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{tle.date | date:'dd/MM/yyyy'}}
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <mat-list role="list">
+        <mat-list-item *ngFor="let ev of tle.events | sortByPipe:'desc':'date'" role="listitem">
+          <app-mission-event [event]="ev"></app-mission-event>
+        </mat-list-item>
+      </mat-list>
+    </mat-expansion-panel>
+  </mat-accordion>

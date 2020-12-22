@@ -1,0 +1,39 @@
+<table class="table">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col"></th>
+        <th scope="col" *ngFor="let stat of datasource">{{stat.aircraftModel}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">Horas de Vuelo</th>
+        <td *ngFor="let stat of datasource">{{stat.flightTime / 3600 | number: '1.0-2'}}</td>
+      </tr>
+      <tr>
+        <th scope="row">Despegues</th>
+        <td *ngFor="let stat of datasource">{{stat.takeOffs ? stat.takeOffs : 0 }}</td>
+      </tr>
+      <tr>
+        <th scope="row">Aterrizajes</th>
+        <td *ngFor="let stat of datasource">{{stat.landings ? stat.landings : 0 }}</td>
+      </tr>
+      <tr>
+        <th scope="row">Muertes</th>
+        <td *ngFor="let stat of datasource">{{stat.deads ? stat.deads : 0 }}</td>
+      </tr>
+      <tr>
+        <th scope="row">Destrucción</th>
+        <td *ngFor="let stat of datasource">{{stat.crashs ? stat.crashs : 0 }}</td>
+      </tr>
+      <tr>
+        <th scope="row">Ejecciones</th>
+        <td *ngFor="let stat of datasource">{{stat.ejects ? stat.ejects : 0}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <mat-paginator *ngIf="stats" [length]="stats.length"
+    hidePageSize="true"
+    [pageSize]="pageSize"
+    (page)="pageEvent = getPaginatedData($event)">
+</mat-paginator>

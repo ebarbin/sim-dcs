@@ -15,6 +15,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MarkerDetailDialogComponent } from './components/marker-detail-dialog/marker-detail-dialog.component';
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { MatCardModule } from '@angular/material/card';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { MatCardModule } from '@angular/material/card';
     MatCheckboxModule,
     MatTableModule,
     MatCardModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatPaginatorModule
   ],
   exports: [
     MatDialogModule,
@@ -52,7 +54,8 @@ import { MatCardModule } from '@angular/material/card';
     MatCheckboxModule,
     MatTableModule,
     MatCardModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatPaginatorModule
   ],
   entryComponents: [
     ConfirmDialogComponent,
