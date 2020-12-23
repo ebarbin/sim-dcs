@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const pilotSchema = new Schema({
-    _id: { type: Schema.Types.ObjectId },
     userName: {type: String},
     stats: [
         { 

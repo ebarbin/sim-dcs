@@ -1,5 +1,5 @@
 <mat-accordion class="example-headers-align" multi>
-    <mat-expansion-panel [expanded]="first" class="date-event" *ngFor="let tle of timeLineEvents; first as first">
+    <mat-expansion-panel [expanded]="first" class="date-event" *ngFor="let tle of datasource; first as first">
       <mat-expansion-panel-header>
         <mat-panel-title>
           {{tle.date | date:'dd/MM/yyyy'}}
@@ -12,3 +12,8 @@
       </mat-list>
     </mat-expansion-panel>
   </mat-accordion>
+  <mat-paginator *ngIf="timeLineEvents" [length]="timeLineEvents.length"
+    hidePageSize="true"
+    [pageSize]="pageSize"
+    (page)="pageEvent = getPaginatedData($event)">
+  </mat-paginator>

@@ -16,6 +16,7 @@ import { MarkerDetailDialogComponent } from './components/marker-detail-dialog/m
 import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dialog.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatDividerModule } from '@angular/material/divider';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatTableModule,
     MatCardModule,
     MatExpansionModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatDividerModule
   ],
   exports: [
     MatDialogModule,
@@ -55,7 +57,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatTableModule,
     MatCardModule,
     MatExpansionModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatDividerModule
   ],
   entryComponents: [
     ConfirmDialogComponent,

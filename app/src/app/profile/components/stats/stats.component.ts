@@ -11,7 +11,6 @@ export class StatsComponent implements OnInit {
   @Input() stats;
   
   pageSize = 2;
-
   pageEvent: PageEvent;
 
   datasource = [];

@@ -15,7 +15,7 @@ a:hover, a:active{
 
 
 mat-toolbar {
-    height: 30px;
+    height: 50px;
     border-radius: 3px;
     border-top: 1px solid grey;
     border-bottom: 1px solid grey;

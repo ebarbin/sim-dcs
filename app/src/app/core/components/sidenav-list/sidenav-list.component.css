@@ -11,3 +11,15 @@ a:hover, a:active{
     display: inline-block;
     padding-left: 6px;
 }
+
+.title {
+    color: rgb(211, 211, 211);
+    font: 500 20px/32px Roboto, "Helvetica Neue", sans-serif;
+    letter-spacing: normal;
+}
+
+.nav-caption {
+    color: rgb(43, 49, 68);
+    font: 500 20px/32px Roboto, "Helvetica Neue", sans-serif;
+    letter-spacing: normal;
+}

@@ -3,3 +3,11 @@ html, body {
     margin: 0;
     height: 100%;
 }
+
+.mat-drawer-inner-container {
+    background-image: linear-gradient(90deg,#f8f8f8, #1c2974);
+}
+
+.mat-sidenav {
+    width: 75% !important;
+}
