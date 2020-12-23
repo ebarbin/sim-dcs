@@ -18,9 +18,7 @@ export class StatsComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit(): void {
-    this.getPaginatedData();
-  }
+  ngOnInit(): void { this.getPaginatedData(); }
 
   getPaginatedData(event?:PageEvent) {
 

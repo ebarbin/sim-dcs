@@ -3,6 +3,7 @@ import { PilotsService } from '../../../common/services/pilots.service';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { MatAccordion } from '@angular/material/expansion';
+import { BlockUI, NgBlockUI } from 'ng-block-ui';
 
 @Component({
   selector: 'app-profile',
@@ -11,6 +12,8 @@ import { MatAccordion } from '@angular/material/expansion';
 })
 export class ProfileComponent implements OnInit {
 
+  @BlockUI() blockUI: NgBlockUI;
+  
   @ViewChild(MatAccordion) accordion: MatAccordion;
   
   user;
@@ -19,13 +22,18 @@ export class ProfileComponent implements OnInit {
 
   constructor(private pilotsService: PilotsService) { }
 
-  ngOnInit(): void {
+  ngOnInit(): void { this.loadProfileData(); }
 
+  private monthName = fe => moment(fe.date, 'YYYY-MM-DD').format('DD/MM/yyyy');
+
+  private loadProfileData() {
+    this.blockUI.start();
     this.pilotsService.getLoggedInPilot().subscribe( (res) => {
       this.user = res.user;
 
-      const monthName = fe => moment(fe.date, 'YYYY-MM-DD').format('DD/MM/yyyy');
-      const result = _.groupBy(res.pilot.flightEvents, monthName);
+      this.timeLineEvents = [];
+      
+      const result = _.groupBy(res.pilot.flightEvents, this.monthName);
       for (const prop in result) {
         this.timeLineEvents.unshift({
           date: moment(prop, 'DD/MM/yyyy').toDate(), 
@@ -39,7 +47,7 @@ export class ProfileComponent implements OnInit {
         deads: 0, crashs: 0, ejects: 0
       };
 
-      this.stats = res.pilot.stats;
+      this.stats = [...res.pilot.stats];
       this.stats.forEach(st => {
         totStat.flightTime += st.flightTime;
         totStat.takeOffs += st.takeOffs;
@@ -50,8 +58,12 @@ export class ProfileComponent implements OnInit {
       });
 
       this.stats.unshift(totStat);
-      
-    })
+      this.blockUI.stop();
+    });
+  }
+
+  onRefresh() {
+    this.loadProfileData();
   }
 
 }

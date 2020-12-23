@@ -12,7 +12,7 @@ const pilotSchema = new Schema({
     ],
     flightEvents: [
         {
-            eventType: String, aircraftModel: String, weaponType: String, weaponName: String, date: Date
+            eventType: String, aircraftModel: String, weaponType: String, weaponName: String, date: Date, target: { coalition: String, group: String, name: String, modelType: String }
         }
     ],
     currentFlightEvents : [{eventType: String, aircraftModel: String, weaponType: String, weaponName: String, date: Date}],

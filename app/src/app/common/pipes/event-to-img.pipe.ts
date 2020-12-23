@@ -1,6 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { faBullseye, faBars, faIdCard, faMap, faUserFriends, faSignOutAlt, faPlaneArrival, faPlaneDeparture, faSignInAlt, 
-  faCrosshairs, faSkull } from '@fortawesome/free-solid-svg-icons';
+import { faSignOutAlt, faPlaneArrival, faPlaneDeparture, faSignInAlt, faCrosshairs, faSkull, faBahai } from '@fortawesome/free-solid-svg-icons';
 
 @Pipe({
   name: 'eventToImgPipe'
@@ -23,6 +22,10 @@ export class EventToImgPipe implements PipeTransform {
         return faCrosshairs;
       case 'S_EVENT_PILOT_DEAD':
         return faSkull;
+      case 'S_EVENT_CRASH':
+        return faBahai;
+      case 'S_EVENT_HIT':
+        return faBahai;
     }
     return null;
   }

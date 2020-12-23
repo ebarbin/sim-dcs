@@ -14,9 +14,15 @@ export class EventTranslatePipe implements PipeTransform {
       case 'S_EVENT_TAKEOFF':
         return 'Ha despegado';
       case 'S_EVENT_LAND':
-        return 'Ha aterrizaje';
+        return 'Ha aterrizado';
       case 'S_EVENT_SHOT':
         return 'Ha disparado';
+      case 'S_EVENT_HIT':
+        return 'Ha impactado';
+      case 'S_EVENT_PILOT_DEAD':
+        return 'Ha muerto';
+      case 'S_EVENT_CRASH':
+        return 'Ha destruido la aeronave';
     }
     return value + ' (missing mapping)';
   }

@@ -10,7 +10,6 @@ export class PilotsService {
 
   myPosition;
 
-  private pilotObs: Observable<any>;
   private pilotsObs: Observable<[any]>;
 
   constructor(private sessionService: SessionService, private http: HttpClient) { }
@@ -33,17 +32,12 @@ export class PilotsService {
   }
 
   getLoggedInPilot() {
-    if (!this.pilotObs) {
       const user = this.sessionService.getUser();
-      this.pilotObs = this.http.get(this.rootURL + '/pilot/' + user.pilot).pipe(
+      return this.http.get(this.rootURL + '/pilot/' + user.pilot).pipe(
         map((pilot:any) => {
           return {pilot: pilot, user: user};
-        }),
-        shareReplay()
+        })
       );
-    }
-
-    return this.pilotObs;
   }
 
   getMyPosition() {

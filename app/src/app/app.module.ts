@@ -29,6 +29,7 @@ import { IconPipe } from './common/pipes/icon.pipe';
 import { LogbookComponent } from './profile/components/logbook/logbook.component';
 import { StatsComponent } from './profile/components/stats/stats.component';
 import { SortByPipe } from './common/pipes/sort-by.pipe';
+import { BlockUIModule } from 'ng-block-ui';
 @NgModule({
   declarations: [
     AppComponent,
@@ -54,6 +55,7 @@ import { SortByPipe } from './common/pipes/sort-by.pipe';
   imports: [
     BrowserModule,
     AgmCoreModule.forRoot({apiKey: 'AIzaSyD_jnKh1nBBdRYdNm85eJ652DuF1AErb20'}),
+    BlockUIModule.forRoot(),
     AppRoutingModule,
     BrowserAnimationsModule,
     FormsModule,
