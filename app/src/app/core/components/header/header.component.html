@@ -11,19 +11,28 @@
         <span>&nbsp;sim-dcs</span>
     </div>
     <div fxFlex fxLayout fxLayoutAlign="end" fxHide.xs>
-        <ul fxLayout fxLayoutGap="15px" class="navigation-items">
-            <li>
+        <mat-nav-list fxLayout="row" fxLayoutGap="15px" class="navigation-items">
+            <mat-list-item>
                 <a routerLink="/home" routerLinkActive="active"><fa-icon [icon]="'faMap' | iconPipe" [fixedWidth]="true"></fa-icon> Mapa</a>
-            </li>
-            <li>
+            </mat-list-item>
+            <mat-list-item [matMenuTriggerFor]="menuMissions">
+                <a><fa-icon [icon]="'faTasks' | iconPipe" [fixedWidth]="true"></fa-icon> Misiones</a>
+            </mat-list-item>
+            <mat-list-item>
                 <a routerLink="/profile" routerLinkActive="active"><fa-icon [icon]="'faIdCard' | iconPipe" [fixedWidth]="true"></fa-icon> Logbook</a>
-            </li>
-            <li>
+            </mat-list-item>
+            <mat-list-item >
                 <a routerLink="/pilots" routerLinkActive="active"><fa-icon [icon]="'faUserFriends' | iconPipe" [fixedWidth]="true"></fa-icon> Pilotos</a>
-            </li>
-            <li>
+            </mat-list-item>
+            <mat-divider></mat-divider>
+            <mat-list-item >
                 <a class="logout" (click)="logout()"><fa-icon [icon]="'faSignOutAlt' | iconPipe" [fixedWidth]="true"></fa-icon></a>
-            </li>
-        </ul>
+            </mat-list-item>
+        </mat-nav-list>
     </div>
   </mat-toolbar>
+  <mat-menu #menuMissions="matMenu">
+    <a mat-menu-item routerLinkActive="subItem-active" routerLink="/create-mission"><fa-icon [icon]="'faPlusCircle' | iconPipe" [fixedWidth]="true"></fa-icon> Crear Misión</a>
+    <a mat-menu-item routerLink="/edit-mission"><fa-icon [icon]="'faEdit' | iconPipe" [fixedWidth]="true"></fa-icon> Modificar</a>
+    <a mat-menu-item ><fa-icon [icon]="'faCalendarAlt' | iconPipe" [fixedWidth]="true"></fa-icon> Ver misiones</a>
+  </mat-menu>

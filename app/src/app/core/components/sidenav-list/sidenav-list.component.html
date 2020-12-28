@@ -1,29 +1,27 @@
-<div style="float:right; margin-right: 10px; margin-top: 10px;">
+<div class="logo">
     <img width="35" [src]="'DCS_World_logo.png' | assetsPathFixPipe">
 </div>
 <br>
-<mat-nav-list>
-    <a mat-list-item routerLink="/home" (click)="onSidenavClose()">
-        <fa-icon [icon]="'faMap' | iconPipe" [fixedWidth]="true"></fa-icon> <span class="nav-caption">Mapa</span>
-    </a>
-    <a mat-list-item routerLink="/profile" (click)="onSidenavClose()">
-        <fa-icon [icon]="'faIdCard' | iconPipe" [fixedWidth]="true"></fa-icon> <span class="nav-caption">Logbook</span>   
-    </a>
-    <a mat-list-item routerLink="/pilots" (click)="onSidenavClose()">
-        <fa-icon [icon]="'faUserFriends' | iconPipe" [fixedWidth]="true"></fa-icon> <span class="nav-caption">Pilotos</span>   
-    </a>
+<mat-nav-list fxLayoutGap="15px" class="navigation-items">
+    <mat-list-item (click)="onSidenavClose('home')">
+        <a routerLinkActive="active"><fa-icon [icon]="'faMap' | iconPipe" [fixedWidth]="true"></fa-icon> Mapa</a>
+    </mat-list-item>
+    <mat-list-item [matMenuTriggerFor]="menuMissions">
+        <a><fa-icon [icon]="'faTasks' | iconPipe" [fixedWidth]="true"></fa-icon> Misiones</a>
+    </mat-list-item>
+    <mat-list-item (click)="onSidenavClose('profile')">
+        <a routerLinkActive="active"><fa-icon [icon]="'faIdCard' | iconPipe" [fixedWidth]="true"></fa-icon> Logbook</a>
+    </mat-list-item>
+    <mat-list-item (click)="onSidenavClose('pilots')">
+        <a routerLinkActive="active"><fa-icon [icon]="'faUserFriends' | iconPipe" [fixedWidth]="true"></fa-icon> Pilotos</a>
+    </mat-list-item>
     <mat-divider></mat-divider>
     <mat-list-item (click)="logout()">
-        <fa-icon [icon]="'faSignOutAlt' | iconPipe" [fixedWidth]="true"></fa-icon> <a class="nav-caption" matline >Salir</a>
+        <a class="logout"><fa-icon [icon]="'faSignOutAlt' | iconPipe" [fixedWidth]="true"></fa-icon> Salir</a>
     </mat-list-item>
-    <!--
-            <mat-list-item [matMenuTriggerFor]="menu">
-        <mat-icon>logout</mat-icon>
-        <a matline>Logout</a>
-    </mat-list-item>
-    <mat-menu #menu="matMenu">
-      <button mat-menu-item (click)="onSidenavClose()">View profile</button>
-      <button mat-menu-item (click)="onSidenavClose()">Add contact</button>
-    </mat-menu>
-    -->
 </mat-nav-list>
+<mat-menu #menuMissions="matMenu">
+    <a mat-menu-item (click)="onSidenavClose('create-mission')"><fa-icon [icon]="'faPlusCircle' | iconPipe" [fixedWidth]="true"></fa-icon> Crear Misión</a>
+    <a mat-menu-item (click)="onSidenavClose('edit-mission')"><fa-icon [icon]="'faEdit' | iconPipe" [fixedWidth]="true"></fa-icon> Modificar mis misiones</a>
+    <a mat-menu-item ><fa-icon [icon]="'faCalendarAlt' | iconPipe" [fixedWidth]="true"></fa-icon> Ver Misiones</a>
+</mat-menu>

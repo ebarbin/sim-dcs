@@ -36,6 +36,13 @@ mat-toolbar {
     cursor: pointer;
 }
 
+.mat-menu-item {
+    color:black;
+}
 .active {
     color: whitesmoke;
+}
+
+.subItem-active {
+    color: gray;
 }

@@ -17,7 +17,11 @@ import { ConfirmDialogComponent } from './components/confirm-dialog/confirm-dial
 import { MatCardModule } from '@angular/material/card';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatDividerModule } from '@angular/material/divider';
-
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatMomentDateModule } from "@angular/material-moment-adapter";
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 @NgModule({
   declarations: [
     MarkerDetailDialogComponent,
@@ -40,7 +44,11 @@ import { MatDividerModule } from '@angular/material/divider';
     MatCardModule,
     MatExpansionModule,
     MatPaginatorModule,
-    MatDividerModule
+    MatDividerModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatMomentDateModule
   ],
   exports: [
     MatDialogModule,
@@ -58,11 +66,16 @@ import { MatDividerModule } from '@angular/material/divider';
     MatCardModule,
     MatExpansionModule,
     MatPaginatorModule,
-    MatDividerModule
+    MatDividerModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatMomentDateModule
   ],
   entryComponents: [
     ConfirmDialogComponent,
     MarkerDetailDialogComponent
-  ]
+  ],
+  providers: [{ provide: MAT_DATE_LOCALE, useValue: 'es-ES' }]
 })
 export class AppMaterialModule { }

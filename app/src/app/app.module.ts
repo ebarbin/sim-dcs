@@ -30,6 +30,11 @@ import { LogbookComponent } from './profile/components/logbook/logbook.component
 import { StatsComponent } from './profile/components/stats/stats.component';
 import { SortByPipe } from './common/pipes/sort-by.pipe';
 import { BlockUIModule } from 'ng-block-ui';
+import { CreateMissionComponent } from './mission/components/create-mission/create-mission.component';
+import { CalendarMissionsComponent } from './mission/components/calendar-missions/calendar-missions.component';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+import { GuiGridModule } from '@generic-ui/ngx-grid';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -50,7 +55,9 @@ import { BlockUIModule } from 'ng-block-ui';
     IconPipe,
     LogbookComponent,
     StatsComponent,
-    SortByPipe
+    SortByPipe,
+    CreateMissionComponent,
+    CalendarMissionsComponent
   ],
   imports: [
     BrowserModule,
@@ -64,7 +71,9 @@ import { BlockUIModule } from 'ng-block-ui';
     AppMaterialModule,
     AgmOverlays,
     FlexLayoutModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    AngularEditorModule,
+    GuiGridModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }

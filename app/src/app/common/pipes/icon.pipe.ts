@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { faBullseye, faBars, faIdCard, faMap, faUserFriends, faSignOutAlt, faPlaneArrival, faPlaneDeparture, faSignInAlt, 
-  faCrosshairs, faSkull, faSyncAlt } from '@fortawesome/free-solid-svg-icons';
+  faCrosshairs, faSkull, faSyncAlt, faTasks, faPlusCircle, faCalendarAlt, faEdit } from '@fortawesome/free-solid-svg-icons';
 
 @Pipe({
   name: 'iconPipe'
@@ -36,6 +36,14 @@ export class IconPipe implements PipeTransform {
         return faSkull;
       case 'faSyncAlt':
         return faSyncAlt;
+      case 'faTasks':
+        return faTasks;
+      case 'faPlusCircle':
+        return faPlusCircle;
+      case 'faCalendarAlt':
+        return faCalendarAlt;
+      case 'faEdit':
+        return faEdit;
     }
 
   }

@@ -3,7 +3,6 @@ import { PilotsService } from '../../../common/services/pilots.service';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { MatAccordion } from '@angular/material/expansion';
-import { BlockUI, NgBlockUI } from 'ng-block-ui';
 
 @Component({
   selector: 'app-profile',
@@ -11,8 +10,6 @@ import { BlockUI, NgBlockUI } from 'ng-block-ui';
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-
-  @BlockUI() blockUI: NgBlockUI;
   
   @ViewChild(MatAccordion) accordion: MatAccordion;
   
@@ -27,7 +24,6 @@ export class ProfileComponent implements OnInit {
   private monthName = fe => moment(fe.date, 'YYYY-MM-DD').format('DD/MM/yyyy');
 
   private loadProfileData() {
-    this.blockUI.start();
     this.pilotsService.getLoggedInPilot().subscribe( (res) => {
       this.user = res.user;
 
@@ -58,7 +54,6 @@ export class ProfileComponent implements OnInit {
       });
 
       this.stats.unshift(totStat);
-      this.blockUI.stop();
     });
   }
 

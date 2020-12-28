@@ -1,0 +1,61 @@
+
+
+  <mat-card>
+    <mat-card-header>
+        <mat-card-title>
+            Crear misión
+        </mat-card-title>
+        <mat-card-subtitle>
+        </mat-card-subtitle>
+      </mat-card-header>
+    <mat-card-content>
+
+      <form novalidate (ngSubmit)="onSubmit()" [formGroup]="mission">
+            
+        <div fxLayout="row" fxLayoutAlign="space-between">
+
+            <mat-form-field class="half-width">
+              <mat-label>Título</mat-label>
+              <input matInput formControlName="title">
+              <mat-error *ngIf="mission.get('title').errors">
+                Campo requerido
+              </mat-error>
+          </mat-form-field>
+
+          <mat-form-field class="half-width margin-left-10">
+            <mat-label>Fecha</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="date">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker color="primary"></mat-datepicker>
+            <mat-error *ngIf="mission.get('date').errors">
+              Campo requerido
+            </mat-error>
+          </mat-form-field>
+
+        </div>
+        
+        <br>
+        <label>Descripción</label>
+        <angular-editor formControlName="description" [config]="editorConfig"></angular-editor>
+        <br>
+        <mat-form-field class="full-width">
+            <mat-label>Google docs Link</mat-label>
+            <input matInput formControlName="googleDocsLink">
+            <mat-error *ngIf="mission.get('googleDocsLink').errors">
+              Campo requerido
+            </mat-error>
+        </mat-form-field>
+                
+
+    
+      </form>
+
+
+      </mat-card-content>
+  
+      <mat-card-actions align="end">
+        <button mat-button color="danger">Cancelar</button>
+        <button mat-button [disabled]="mission.invalid">Guardar</button>
+      </mat-card-actions>
+
+    </mat-card>
