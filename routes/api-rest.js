@@ -1,4 +1,6 @@
 const express = require('express');
+const discordBot = require('../discord-bot');
+
 const apiRest = express.Router();
 const ObjectId = require('mongoose').Types.ObjectId; 
 
@@ -27,5 +29,10 @@ apiRest.get('/auth/check/:token', (req, res) => {
     console.log(req.params.token);
 })
 
+apiRest.get('/test/:msg', (req, res) => {
+    const generalChannel = discordBot.channels.cache.find(channel => channel.name === 'general');
+    generalChannel.send(req.params.msg)
+    res.send(200);
+});
 
 module.exports = apiRest;
