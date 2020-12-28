@@ -1,5 +1,5 @@
 
-
+<form novalidate (ngSubmit)="onSubmit($event)" [formGroup]="mission">
   <mat-card>
     <mat-card-header>
         <mat-card-title>
@@ -10,7 +10,7 @@
       </mat-card-header>
     <mat-card-content>
 
-      <form novalidate (ngSubmit)="onSubmit()" [formGroup]="mission">
+      
             
         <div fxLayout="row" fxLayoutAlign="space-between">
 
@@ -33,7 +33,7 @@
           </mat-form-field>
 
         </div>
-        
+
         <br>
         <label>Descripción</label>
         <angular-editor formControlName="description" [config]="editorConfig"></angular-editor>
@@ -45,17 +45,13 @@
               Campo requerido
             </mat-error>
         </mat-form-field>
-                
-
-    
-      </form>
-
 
       </mat-card-content>
   
       <mat-card-actions align="end">
-        <button mat-button color="danger">Cancelar</button>
-        <button mat-button [disabled]="mission.invalid">Guardar</button>
+        <button type="button" mat-button color="danger" (click)="onCancel()">Cancelar</button>
+        <button type="submit" mat-button [disabled]="mission.invalid">Guardar</button>
       </mat-card-actions>
 
     </mat-card>
+  </form>

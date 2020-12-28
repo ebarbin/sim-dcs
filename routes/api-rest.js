@@ -29,10 +29,11 @@ apiRest.get('/auth/check/:token', (req, res) => {
     console.log(req.params.token);
 })
 
-apiRest.get('/test/:msg', (req, res) => {
-    const generalChannel = discordBot.channels.cache.find(channel => channel.name === 'general');
-    generalChannel.send(req.params.msg)
-    res.send(200);
+apiRest.post('/missions/create', (req, res) => {
+    console.log(req.body)
+   /* const generalChannel = discordBot.channels.cache.find(channel => channel.name === 'general');
+    generalChannel.send(req.params.msg)*/
+    res.json();
 });
 
 module.exports = apiRest;

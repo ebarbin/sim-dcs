@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { GuiCellView, GuiColumn } from '@generic-ui/ngx-grid';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { MissionsService } from 'src/app/common/services/missions.service';
 
 @Component({
   selector: 'app-create-mission',
@@ -58,7 +60,7 @@ export class CreateMissionComponent implements OnInit {
 
   mission: FormGroup;
 
-  constructor(private formBuilder:FormBuilder) { }
+  constructor(private router: Router, private missionsService: MissionsService, private formBuilder:FormBuilder) { }
 
   ngOnInit(): void {
     this.mission = this.formBuilder.group({
@@ -69,8 +71,12 @@ export class CreateMissionComponent implements OnInit {
     });
   }
 
-  onSubmit(){
-    console.log(this.mission);
+  onSubmit() {
+    this.missionsService.createMission(this.mission.value).subscribe(data => this.router.navigate(['home']));
+  }
+
+  onCancel() {
+    this.router.navigate(['home']);
   }
 
   columns: Array<GuiColumn> = [{

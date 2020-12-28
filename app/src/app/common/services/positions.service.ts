@@ -12,7 +12,6 @@ export class PositionsService {
   rootURL = '/api';
 
   positionsChanged = new Subject<any>();
-  private positionsObs: Observable<[any]>;
 
   centerChanged = new Subject<any>();
 
