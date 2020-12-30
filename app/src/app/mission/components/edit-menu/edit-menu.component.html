@@ -1,0 +1,21 @@
+<button mat-icon-button [matMenuTriggerFor]="menu">
+    <fa-icon [icon]="'faEllipsisV' | iconPipe" [fixedWidth]="true"></fa-icon>
+</button>
+<mat-menu #menu="matMenu">
+    <button mat-menu-item [disabled]="element.publish">
+        <mat-icon>edit</mat-icon>
+        <span>Editar</span>
+    </button>
+    <button mat-menu-item (click)="onPublish()" [disabled]="element.publish">
+        <mat-icon>thumb_up_alt</mat-icon>
+        <span>Publicar</span>
+    </button>
+    <button mat-menu-item (click)="onUnPublish()" [disabled]="!element.publish">
+        <mat-icon>thumb_down_alt</mat-icon>
+        <span>Quitar pub.</span>
+    </button>
+    <button mat-menu-item (click)="onRemove()" [disabled]="element.publish">
+        <mat-icon>delete</mat-icon>
+        <span>Eliminar</span>
+    </button>
+</mat-menu>

@@ -32,9 +32,9 @@ import { SortByPipe } from './common/pipes/sort-by.pipe';
 import { BlockUIModule } from 'ng-block-ui';
 import { CreateMissionComponent } from './mission/components/create-mission/create-mission.component';
 import { CalendarMissionsComponent } from './mission/components/calendar-missions/calendar-missions.component';
-import { AngularEditorModule } from '@kolkov/angular-editor';
-import { GuiGridModule } from '@generic-ui/ngx-grid';
-
+import { MyMissionListComponent } from './mission/components/my-mission-list/my-mission-list.component';
+import { ToastrModule } from 'ngx-toastr';
+import { EditMenuComponent } from './mission/components/edit-menu/edit-menu.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -57,12 +57,15 @@ import { GuiGridModule } from '@generic-ui/ngx-grid';
     StatsComponent,
     SortByPipe,
     CreateMissionComponent,
-    CalendarMissionsComponent
+    CalendarMissionsComponent,
+    MyMissionListComponent,
+    EditMenuComponent
   ],
   imports: [
     BrowserModule,
     AgmCoreModule.forRoot({apiKey: 'AIzaSyD_jnKh1nBBdRYdNm85eJ652DuF1AErb20'}),
     BlockUIModule.forRoot(),
+    ToastrModule.forRoot(),
     AppRoutingModule,
     BrowserAnimationsModule,
     FormsModule,
@@ -71,9 +74,7 @@ import { GuiGridModule } from '@generic-ui/ngx-grid';
     AppMaterialModule,
     AgmOverlays,
     FlexLayoutModule,
-    FontAwesomeModule,
-    AngularEditorModule,
-    GuiGridModule
+    FontAwesomeModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }

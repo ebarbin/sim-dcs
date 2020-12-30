@@ -1,0 +1,16 @@
+<h2 mat-dialog-title>Atención</h2>
+<mat-dialog-content class="mat-typography">
+  <h3>Seleccione la fecha de la misión:</h3>
+  
+  <mat-form-field class="full-width">
+    <mat-label>Fecha</mat-label>
+    <input matInput [matDatepicker]="picker" [(ngModel)]="selectedDate" readonly [min]="todayDate">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker color="primary"></mat-datepicker>
+  </mat-form-field>
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cerrar</button>
+  <button mat-button (click)="onAccept()" [disabled]="!selectedDate">Aceptar</button>
+</mat-dialog-actions>

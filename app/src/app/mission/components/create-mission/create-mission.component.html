@@ -1,5 +1,5 @@
 
-<form novalidate (ngSubmit)="onSubmit($event)" [formGroup]="mission">
+<form novalidate [formGroup]="mission">
   <mat-card>
     <mat-card-header>
         <mat-card-title>
@@ -10,48 +10,59 @@
       </mat-card-header>
     <mat-card-content>
 
-      
-            
-        <div fxLayout="row" fxLayoutAlign="space-between">
-
-            <mat-form-field class="half-width">
-              <mat-label>Título</mat-label>
-              <input matInput formControlName="title">
-              <mat-error *ngIf="mission.get('title').errors">
-                Campo requerido
-              </mat-error>
-          </mat-form-field>
-
-          <mat-form-field class="half-width margin-left-10">
-            <mat-label>Fecha</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="date">
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker color="primary"></mat-datepicker>
-            <mat-error *ngIf="mission.get('date').errors">
-              Campo requerido
-            </mat-error>
-          </mat-form-field>
-
-        </div>
-
-        <br>
-        <label>Descripción</label>
-        <angular-editor formControlName="description" [config]="editorConfig"></angular-editor>
-        <br>
         <mat-form-field class="full-width">
-            <mat-label>Google docs Link</mat-label>
-            <input matInput formControlName="googleDocsLink">
-            <mat-error *ngIf="mission.get('googleDocsLink').errors">
+            <mat-label>Título</mat-label>
+            <input matInput formControlName="title">
+            <mat-error *ngIf="mission.get('title').errors">
               Campo requerido
             </mat-error>
         </mat-form-field>
 
-      </mat-card-content>
-  
-      <mat-card-actions align="end">
-        <button type="button" mat-button color="danger" (click)="onCancel()">Cancelar</button>
-        <button type="submit" mat-button [disabled]="mission.invalid">Guardar</button>
-      </mat-card-actions>
+      <!--<div fxLayout="row" fxLayoutAlign="space-between">
 
-    </mat-card>
-  </form>
+        <mat-form-field class="half-width">
+            <mat-label>Título</mat-label>
+            <input matInput formControlName="title">
+            <mat-error *ngIf="mission.get('title').errors">
+              Campo requerido
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="half-width margin-left-10">
+          <mat-label>Fecha</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="date" readonly [min]="todayDate" (dateChange)="onSelectDate($event)">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker color="primary"></mat-datepicker>
+          <mat-error *ngIf="mission.get('date').errors">
+            Campo requerido
+          </mat-error>
+        </mat-form-field>
+      </div>-->
+
+      <mat-form-field class="full-width">
+        <mat-label>Descripción</mat-label>
+        <input matInput formControlName="description">
+        <mat-error *ngIf="mission.get('description').errors">
+          Campo requerido
+        </mat-error>
+      </mat-form-field>
+
+      <br>
+      <mat-form-field class="full-width">
+          <mat-label>Google docs Link</mat-label>
+          <input matInput formControlName="googleDocsLink">
+          <mat-error *ngIf="mission.get('googleDocsLink').errors">
+            <span *ngIf="mission.get('googleDocsLink').errors.required">Campo requerido</span>
+            <span *ngIf="mission.get('googleDocsLink').errors.pattern">La url no es válida</span>
+          </mat-error>
+      </mat-form-field>
+
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+      <button type="button" mat-button [disabled]="mission.invalid" (click)="onSubmit()">Guardar</button>
+      <button type="button" mat-button [disabled]="mission.invalid" (click)="onSubmitAndPublish()">Guardar y publicar</button>
+    </mat-card-actions>
+
+  </mat-card>
+</form>

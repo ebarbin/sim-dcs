@@ -22,13 +22,17 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatMomentDateModule } from "@angular/material-moment-adapter";
 import { MAT_DATE_LOCALE } from '@angular/material/core';
+import { ScheduleMissionDialogComponent } from './components/schedule-mission-dialog/schedule-mission-dialog.component';
+import { FormsModule } from '@angular/forms';
 @NgModule({
   declarations: [
     MarkerDetailDialogComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    ScheduleMissionDialogComponent
   ],
   imports: [
     CommonModule,
+    FormsModule,
     MatDialogModule,
     MatTabsModule,
     MatSidenavModule,
@@ -74,7 +78,8 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
   ],
   entryComponents: [
     ConfirmDialogComponent,
-    MarkerDetailDialogComponent
+    MarkerDetailDialogComponent,
+    ScheduleMissionDialogComponent
   ],
   providers: [{ provide: MAT_DATE_LOCALE, useValue: 'es-ES' }]
 })

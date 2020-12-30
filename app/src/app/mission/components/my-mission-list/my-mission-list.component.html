@@ -1,0 +1,47 @@
+<mat-card>
+    <mat-card-header>
+        <mat-card-title>
+            Mis misiones <fa-icon (click)="ngOnInit()" [icon]="'faSync' | iconPipe" [fixedWidth]="true" size="lg"></fa-icon>
+        </mat-card-title>
+        <mat-card-subtitle>
+        </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <span *ngIf="missions.length == 0">No tenes misiones creadas!</span>
+        <table mat-table [dataSource]="missions" *ngIf="missions.length > 0">
+            <ng-container matColumnDef="title">
+              <th mat-header-cell *matHeaderCellDef>Título</th>
+              <td mat-cell *matCellDef="let element"><strong>{{element.title | truncateText:[40, '...']}}</strong></td>
+            </ng-container>
+
+            <ng-container matColumnDef="date">
+                <th mat-header-cell *matHeaderCellDef>Fecha</th>
+                <td mat-cell *matCellDef="let element">
+                    <span *ngIf="element.date">{{element.date | date: 'dd/MM/yyyy'}}</span>
+                    <span *ngIf="!element.date">-</span>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="publish">
+                <th mat-header-cell *matHeaderCellDef>Publicado</th>
+                <td mat-cell *matCellDef="let element"> 
+                    <fa-icon *ngIf="element.publish" [icon]=" 'faThumbsUp' | iconPipe" [fixedWidth]="true"></fa-icon>
+                    <fa-icon *ngIf="!element.publish" [icon]=" 'faThumbsDown' | iconPipe" [fixedWidth]="true"></fa-icon>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let element">
+                    <app-edit-menu (dataChangedEvent)="ngOnInit()" [element]="element"></app-edit-menu>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+    </mat-card-content>
+
+</mat-card>
+

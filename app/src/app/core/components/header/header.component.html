@@ -13,16 +13,16 @@
     <div fxFlex fxLayout fxLayoutAlign="end" fxHide.xs>
         <mat-nav-list fxLayout="row" fxLayoutGap="15px" class="navigation-items">
             <mat-list-item>
-                <a routerLink="/home" routerLinkActive="active"><fa-icon [icon]="'faMap' | iconPipe" [fixedWidth]="true"></fa-icon> Mapa</a>
+                <a routerLink="/home" routerLinkActive="active"><fa-icon [icon]="'faMap' | iconPipe" [fixedWidth]="true"></fa-icon>Mapa</a>
             </mat-list-item>
             <mat-list-item [matMenuTriggerFor]="menuMissions">
-                <a><fa-icon [icon]="'faTasks' | iconPipe" [fixedWidth]="true"></fa-icon> Misiones</a>
+                <a><fa-icon [icon]="'faTasks' | iconPipe" [fixedWidth]="true"></fa-icon>Misiones</a>
             </mat-list-item>
             <mat-list-item>
-                <a routerLink="/profile" routerLinkActive="active"><fa-icon [icon]="'faIdCard' | iconPipe" [fixedWidth]="true"></fa-icon> Logbook</a>
+                <a routerLink="/profile" routerLinkActive="active"><fa-icon [icon]="'faIdCard' | iconPipe" [fixedWidth]="true"></fa-icon>Logbook</a>
             </mat-list-item>
             <mat-list-item >
-                <a routerLink="/pilots" routerLinkActive="active"><fa-icon [icon]="'faUserFriends' | iconPipe" [fixedWidth]="true"></fa-icon> Pilotos</a>
+                <a routerLink="/pilots" routerLinkActive="active"><fa-icon [icon]="'faUserFriends' | iconPipe" [fixedWidth]="true"></fa-icon>Pilotos</a>
             </mat-list-item>
             <mat-divider></mat-divider>
             <mat-list-item >
@@ -32,7 +32,7 @@
     </div>
   </mat-toolbar>
   <mat-menu #menuMissions="matMenu">
-    <a mat-menu-item routerLinkActive="subItem-active" routerLink="/create-mission"><fa-icon [icon]="'faPlusCircle' | iconPipe" [fixedWidth]="true"></fa-icon> Crear Misión</a>
-    <a mat-menu-item routerLink="/edit-mission"><fa-icon [icon]="'faEdit' | iconPipe" [fixedWidth]="true"></fa-icon> Modificar</a>
+    <a mat-menu-item routerLinkActive="subItem-active" routerLink="/create-mission"><fa-icon [icon]="'faPlusCircle' | iconPipe" [fixedWidth]="true"></fa-icon>Crear Misión</a>
+    <a mat-menu-item routerLinkActive="subItem-active" routerLink="/my-mission-list"><fa-icon [icon]="'faEdit' | iconPipe" [fixedWidth]="true"></fa-icon>Mis misiones</a>
     <a mat-menu-item ><fa-icon [icon]="'faCalendarAlt' | iconPipe" [fixedWidth]="true"></fa-icon> Ver misiones</a>
   </mat-menu>
