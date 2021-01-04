@@ -67,16 +67,23 @@ apiRest.post('/pilot/:id/skill/all', (req, res) => {
     const pilot = req.params.id;
     const status = req.body.status;
 
-    Skill.find({parent: new ObjectId(req.body.skill)}).then(skills => {
+    Skill.findById(new ObjectId(req.body.skill)).then(parent => {
 
-        const objects = skills.map(childId => { return {  pilot: pilot,  skill: childId, status: status } });
+        
+        Skill.find({parent: new ObjectId(req.body.skill)}).then(skills => {
 
-        PilotSkill.insertMany(objects).then(saved => { 
-            saved.forEach(s => s.skill = s.skill._id);
-            res.json(saved);
+            skills.push(parent);
+            const objects = skills.map(childId => { return {  pilot: pilot,  skill: childId, status: status } });
+
+            PilotSkill.insertMany(objects).then(saved => { 
+                saved.forEach(s => s.skill = s.skill._id);
+                res.json(saved);
+            });
+    
         });
 
-    });
+    })
+
 })
 
 apiRest.delete('/pilot/:id/skill/:skill/all', (req, res) => {
