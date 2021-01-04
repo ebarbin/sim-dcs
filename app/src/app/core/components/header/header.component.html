@@ -32,7 +32,13 @@
     </div>
   </mat-toolbar>
   <mat-menu #menuMissions="matMenu">
-    <a mat-menu-item routerLinkActive="subItem-active" routerLink="/create-mission"><fa-icon [icon]="'faPlusCircle' | iconPipe" [fixedWidth]="true"></fa-icon>Crear Misión</a>
-    <a mat-menu-item routerLinkActive="subItem-active" routerLink="/my-mission-list"><fa-icon [icon]="'faEdit' | iconPipe" [fixedWidth]="true"></fa-icon>Mis misiones</a>
-    <a mat-menu-item ><fa-icon [icon]="'faCalendarAlt' | iconPipe" [fixedWidth]="true"></fa-icon> Ver misiones</a>
+    <a mat-menu-item routerLinkActive="subItem-active" routerLink="/create-mission">
+        <fa-icon [icon]="'faPlusCircle' | iconPipe" [fixedWidth]="true"></fa-icon>&nbsp;&nbsp;&nbsp;Crear Misión
+    </a>
+    <a mat-menu-item routerLinkActive="subItem-active" routerLink="/my-mission-list">
+        <fa-icon [icon]="'faEdit' | iconPipe" [fixedWidth]="true"></fa-icon>&nbsp;&nbsp;&nbsp;Mis misiones
+    </a>
+    <a mat-menu-item >
+        <fa-icon [icon]="'faCalendarAlt' | iconPipe" [fixedWidth]="true"></fa-icon>&nbsp;&nbsp;&nbsp;Ver misiones
+    </a>
   </mat-menu>

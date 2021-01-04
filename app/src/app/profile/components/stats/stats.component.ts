@@ -8,7 +8,8 @@ import { PageEvent } from '@angular/material/paginator';
 })
 export class StatsComponent implements OnInit {
 
-  @Input() stats;
+  stats = [];
+  @Input() pilot;
   
   pageSize = 2;
   pageEvent: PageEvent;
@@ -17,7 +18,29 @@ export class StatsComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit(): void { this.getPaginatedData(); }
+  ngOnInit(): void { 
+
+    const totStat = {
+      aircraftModel:'Totales',
+      flightTime: 0, takeOffs: 0, landings: 0,
+      deads: 0, crashs: 0, ejects: 0
+    };
+
+    this.stats = [...this.pilot.stats];
+    
+    this.stats.forEach(st => {
+      totStat.flightTime += st.flightTime;
+      totStat.takeOffs += st.takeOffs;
+      totStat.landings += st.landings;
+      totStat.deads += st.deads;
+      totStat.crashs += st.crashs;
+      totStat.ejects += st.ejects;
+    });
+
+    this.stats.unshift(totStat);
+
+    this.getPaginatedData(); 
+  }
 
   getPaginatedData(event?:PageEvent) {
 

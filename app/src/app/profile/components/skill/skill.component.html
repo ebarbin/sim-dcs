@@ -1,0 +1,18 @@
+<mat-accordion multi *ngIf="skill">
+<mat-expansion-panel class="expansion-panel" (opened)="onExpand(skill)">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+         <mat-checkbox labelPosition="after" [disabled]="true">{{skill.name}}</mat-checkbox>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-list role="list">
+      <mat-list-item *ngFor="let cs of childSkills" role="listitem">
+          <mat-slide-toggle labelPosition="after" [checked]="cs.requested" (change)="onRequestSkillChange($event, cs)">{{cs.name}}</mat-slide-toggle>
+      </mat-list-item>
+    </mat-list>
+    <mat-action-row>
+      <button mat-button color="warn" >Ninguno</button>
+      <button mat-button color="primary" >Todos</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+</mat-accordion>

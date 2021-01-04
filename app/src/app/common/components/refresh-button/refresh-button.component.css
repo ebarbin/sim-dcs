@@ -1,0 +1,18 @@
+.float-btn {
+    position:fixed;
+    z-index: 1;
+	width:60px;
+	height:60px;
+	bottom:40px;
+	right:25px;
+	background-color:#094998;
+	border-radius:50px;
+	text-align:center;
+	box-shadow: 2px 2px 3px #999;
+}
+
+.float-btn fa-icon {
+  color:#FFF;
+  line-height: 60px;
+  font-size: 30px;
+}

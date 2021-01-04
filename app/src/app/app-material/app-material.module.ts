@@ -24,6 +24,7 @@ import { MatMomentDateModule } from "@angular/material-moment-adapter";
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { ScheduleMissionDialogComponent } from './components/schedule-mission-dialog/schedule-mission-dialog.component';
 import { FormsModule } from '@angular/forms';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 @NgModule({
   declarations: [
     MarkerDetailDialogComponent,
@@ -52,7 +53,8 @@ import { FormsModule } from '@angular/forms';
     MatFormFieldModule,
     MatInputModule,
     MatDatepickerModule,
-    MatMomentDateModule
+    MatMomentDateModule,
+    MatSlideToggleModule
   ],
   exports: [
     MatDialogModule,
@@ -74,7 +76,8 @@ import { FormsModule } from '@angular/forms';
     MatFormFieldModule,
     MatInputModule,
     MatDatepickerModule,
-    MatMomentDateModule
+    MatMomentDateModule,
+    MatSlideToggleModule
   ],
   entryComponents: [
     ConfirmDialogComponent,

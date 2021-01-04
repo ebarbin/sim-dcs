@@ -2,6 +2,10 @@
     <fa-icon [icon]="'faEllipsisV' | iconPipe" [fixedWidth]="true"></fa-icon>
 </button>
 <mat-menu #menu="matMenu">
+    <button class="btn" mat-menu-item (click)="onLink()">
+        <mat-icon>link</mat-icon>
+        <span>Link</span>
+    </button>
     <button mat-menu-item [disabled]="element.publish">
         <mat-icon>edit</mat-icon>
         <span>Editar</span>

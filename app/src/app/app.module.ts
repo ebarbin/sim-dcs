@@ -35,6 +35,10 @@ import { CalendarMissionsComponent } from './mission/components/calendar-mission
 import { MyMissionListComponent } from './mission/components/my-mission-list/my-mission-list.component';
 import { ToastrModule } from 'ngx-toastr';
 import { EditMenuComponent } from './mission/components/edit-menu/edit-menu.component';
+import { MatButtonModule } from '@angular/material/button';
+import { RefreshButtonComponent } from './common/components/refresh-button/refresh-button.component';
+import { SkillListComponent } from './profile/components/skill-list/skill-list.component';
+import { SkillComponent } from './profile/components/skill/skill.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -59,7 +63,10 @@ import { EditMenuComponent } from './mission/components/edit-menu/edit-menu.comp
     CreateMissionComponent,
     CalendarMissionsComponent,
     MyMissionListComponent,
-    EditMenuComponent
+    EditMenuComponent,
+    RefreshButtonComponent,
+    SkillListComponent,
+    SkillComponent
   ],
   imports: [
     BrowserModule,
@@ -74,7 +81,8 @@ import { EditMenuComponent } from './mission/components/edit-menu/edit-menu.comp
     AppMaterialModule,
     AgmOverlays,
     FlexLayoutModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    MatButtonModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }

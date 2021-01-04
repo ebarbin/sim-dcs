@@ -56,4 +56,6 @@ export class EditMenuComponent implements OnInit {
       }
     });
   }
+
+  onLink() { window.open(this.element.googleDocsLink); }
 }

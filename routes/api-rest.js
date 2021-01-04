@@ -10,7 +10,8 @@ const ObjectId = require('mongoose').Types.ObjectId;
 const Position = require('../schemas/Position');
 const Pilot = require('../schemas/Pilot');
 const Mission = require('../schemas/Mission');
-const User = require('../schemas/User');
+const Skill = require('../schemas/Skill');
+const PilotSkill = require('../schemas/PilotSkill');
 
 apiRest.get('/positions', (req, res) => {
     Position.find().then((positions) => {
@@ -25,7 +26,7 @@ apiRest.get('/pilot', (req, res) => {
 })
 
 apiRest.get('/pilot/:id', (req, res) => {
-    Pilot.findOne({_id: new ObjectId(req.params.id)}).then((pil) => {
+    Pilot.findById(new ObjectId(req.params.id)).then((pil) => {
         res.json(pil);
     });
 })
@@ -36,6 +37,39 @@ apiRest.get('/auth/check/:token', (req, res) => {
 
 apiRest.get('/mission/:userId', (req, res) => {
     Mission.find({'user': new ObjectId(req.params.userId) }).then(missions => res.json(missions));
+})
+
+apiRest.get('/skill', (req, res) => {
+    const query = {};
+
+    if (req.query.parent) query.parent = req.query.parent;
+    else query.parent = {$exists: false};
+
+    Skill.find(query).then(skills => res.json(skills));
+})
+
+apiRest.get('/pilot/:id/skill', (req, res) => {
+    PilotSkill.find({pilot: new ObjectId(req.params.id)}).then(skills => res.json(skills));
+})
+
+apiRest.post('/pilot/:id/skill', (req, res) => {
+    const pilot = req.params.id;
+    const skill = req.body.skill;
+    const status = req.body.status;
+
+    new PilotSkill({ 
+        pilot: pilot, 
+        skill: skill,
+        status: status
+    }).save().then(() => {
+        res.json();
+    });
+
+})
+
+apiRest.delete('/pilot/:id/skill/:skill', (req, res) => {
+    
+    PilotSkill.deleteOne({pilot: new ObjectId(req.params.id), skill: new ObjectId(req.params.skill)}).then(() => res.json());
 })
 
 apiRest.delete('/mission/:id', (req, res) => {

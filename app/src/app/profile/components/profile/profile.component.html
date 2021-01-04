@@ -1,31 +1,34 @@
-<mat-card *ngIf="user">
+<mat-card>
     
   <mat-card-header>
-      <img mat-card-avatar [src]="user.avatar">
-      <mat-card-title>
-        <div>
-          <div style="float:left;">{{user.userName}}</div>
-          <div style="float:right;" (click)="onRefresh()"><fa-icon [icon]="'faSyncAlt' | iconPipe" [fixedWidth]="true"></fa-icon></div>
+    <img *ngIf="user" mat-card-avatar [src]="user.avatar">
+    <mat-card-title>
+      {{user?.userName}}
+    </mat-card-title>
+    <mat-card-subtitle>
+      {{user?.email}}
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-tab-group mat-align-tabs="start">
+      <mat-tab label="Logbook">
+        <div class="tab-content">
+          <app-logbook *ngIf="pilot" [pilot]="pilot"></app-logbook>
         </div>
-      </mat-card-title>
-      <mat-card-subtitle>
-        {{user.email}}
-      </mat-card-subtitle>
-      
-    </mat-card-header>
-    <mat-card-content>
-      <mat-tab-group mat-align-tabs="start">
-        <mat-tab label="Logbook">
-          <div class="tab-content">
-            <app-logbook [timeLineEvents]="timeLineEvents"></app-logbook>
-          </div>
-        </mat-tab>
-        <mat-tab label="Generales">
-          <div class="tab-content">
-            <app-stats [stats]="stats"></app-stats>
-          </div>
-        </mat-tab>
-      </mat-tab-group>
-    </mat-card-content>
+      </mat-tab>
+      <mat-tab label="Generales">
+        <div class="tab-content">
+          <app-stats *ngIf="pilot" [pilot]="pilot"></app-stats>
+        </div>
+      </mat-tab>
+      <mat-tab label="Skills">
+        <div class="tab-content">
+          <app-skill-list *ngIf="user"></app-skill-list>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card-content>
 
   </mat-card>
+
+  <app-refresh-button (refresh)="onRefresh()"></app-refresh-button>
