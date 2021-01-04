@@ -1,3 +1,4 @@
-<app-skill *ngFor="let skill of parentSkills" [skill]="skill" [pilotSkills]="pilotSkills"></app-skill>
-
+<mat-accordion multi>
+    <app-skill *ngFor="let skill of parentSkills" [skill]="skill" [pilotSkills]="pilotSkills"></app-skill>
+</mat-accordion>
 

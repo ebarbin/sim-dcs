@@ -12,7 +12,8 @@ export class PilotsService {
 
   private pilotsObs: Observable<[any]>;
 
-  pilotSkillChanged = new Subject();
+  pilotSkillAdded = new Subject();
+  pilotSkillRemoved = new Subject();
 
   constructor(private sessionService: SessionService, private http: HttpClient) { }
 
@@ -61,14 +62,30 @@ export class PilotsService {
 
   addPilotSkill(skill) {
     const user = this.sessionService.getUser();
-    return this.http.post(this.rootURL + '/pilot/' + user.pilot + '/skill', {skill: skill._id, status:'requested'}).pipe(
-      tap((a) => this.pilotSkillChanged.next())
+    return this.http.post(this.rootURL + '/pilot/' + user.pilot + '/skill', {skill: skill._id, status: 'requested'}).pipe(
+      tap(ps => this.pilotSkillAdded.next([ps]))
+    )
+  }
+
+  addPilotAllSkills(skill) {
+    const user = this.sessionService.getUser();
+    return this.http.post(this.rootURL + '/pilot/' + user.pilot + '/skill/all', {skill: skill._id, status: 'requested'}).pipe(
+      tap(updated => this.pilotSkillAdded.next(updated))
     )
   }
 
   removePilotSkill(skill) {
     const user = this.sessionService.getUser();
-    return this.http.delete(this.rootURL + '/pilot/' + user.pilot + '/skill/' + skill._id);
+    return this.http.delete(this.rootURL + '/pilot/' + user.pilot + '/skill/' + skill._id).pipe(
+      tap(ps => this.pilotSkillRemoved.next([ps]))
+    )
+  }
+
+  removePilotAllSkills(skill) {
+    const user = this.sessionService.getUser();
+    return this.http.delete(this.rootURL + '/pilot/' + user.pilot + '/skill/' + skill._id + '/all').pipe(
+      tap(updated => this.pilotSkillRemoved.next(updated))
+    )
   }
 
   setMyPosition(pos) {

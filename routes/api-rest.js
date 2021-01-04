@@ -57,19 +57,44 @@ apiRest.post('/pilot/:id/skill', (req, res) => {
     const skill = req.body.skill;
     const status = req.body.status;
 
-    new PilotSkill({ 
-        pilot: pilot, 
-        skill: skill,
-        status: status
-    }).save().then(() => {
-        res.json();
+    new PilotSkill({  pilot: pilot,  skill: skill, status: status }).save().then((ps) => {
+        res.json(ps);
     });
+})
 
+
+apiRest.post('/pilot/:id/skill/all', (req, res) => {
+    const pilot = req.params.id;
+    const status = req.body.status;
+
+    Skill.find({parent: new ObjectId(req.body.skill)}).then(skills => {
+
+        const objects = skills.map(childId => { return {  pilot: pilot,  skill: childId, status: status } });
+
+        PilotSkill.insertMany(objects).then(saved => { 
+            saved.forEach(s => s.skill = s.skill._id);
+            res.json(saved);
+        });
+
+    });
+})
+
+apiRest.delete('/pilot/:id/skill/:skill/all', (req, res) => {
+    Skill.find({parent: new ObjectId(req.params.skill)}).then(skills => {
+
+        const skillsId = skills.map(s => s._id);
+        skillsId.push(req.params.skill);
+
+        PilotSkill.find({pilot: new ObjectId(req.params.id), skill: {$in: skillsId} }).then((deleted) => {
+            PilotSkill.deleteMany({pilot: new ObjectId(req.params.id), skill: {$in: skillsId} }).then(() => res.json(deleted));
+        });        
+    });
 })
 
 apiRest.delete('/pilot/:id/skill/:skill', (req, res) => {
-    
-    PilotSkill.deleteOne({pilot: new ObjectId(req.params.id), skill: new ObjectId(req.params.skill)}).then(() => res.json());
+    PilotSkill.findOne({pilot: new ObjectId(req.params.id), skill: new ObjectId(req.params.skill)}).then(ps => {
+        PilotSkill.deleteOne({pilot: new ObjectId(req.params.id), skill: new ObjectId(req.params.skill)}).then(() => res.json(ps));
+    })
 })
 
 apiRest.delete('/mission/:id', (req, res) => {
