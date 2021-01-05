@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { PilotsService } from '../../../common/services/pilots.service';
+import { FlightEventsService } from 'src/app/common/services/flight-events.service';
+import { FlightStatsService } from 'src/app/common/services/flight-stats.service';
+import { SessionService } from 'src/app/common/services/session.service';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -10,19 +12,15 @@ export class ProfileComponent implements OnInit {
   user: any;
   pilot: any;
 
-  constructor(private pilotsService: PilotsService) { }
+  constructor(private sessionService: SessionService, private flightEventsService: FlightEventsService, private flightStatsService: FlightStatsService) { }
 
-  ngOnInit(): void { this.loadProfileData(); }
-
-  private loadProfileData() {
-    this.pilotsService.getLoggedInPilot().subscribe( (res) => {
-      this.user = res.user;
-      this.pilot = res.pilot;
-    });
+  ngOnInit(): void { 
+    this.user = this.sessionService.getUser();
   }
 
   onRefresh() {
-    this.loadProfileData();
+    this.flightEventsService.flightEventRefresh.next();
+    this.flightStatsService.flightStatsRefresh.next();
   }
 
 }

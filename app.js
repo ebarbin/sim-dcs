@@ -28,7 +28,13 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/api', require('./routes/api-rest'));
+//Api
+app.use('/api', require('./routes/api/common'));
+app.use('/api/pilot', require('./routes/api/pilot'));
+app.use('/api/mission', require('./routes/api/mission'));
+app.use('/api/flight-event', require('./routes/api/flight-event'));
+app.use('/api/flight-stat', require('./routes/api/flight-stat'));
+
 app.use('/auth', require('./routes/auth'));
 app.use(require('./routes/router'));
 

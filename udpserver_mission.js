@@ -2,6 +2,10 @@ var net = require('dgram');
 var moment = require('moment');
 
 const Position = require('./schemas/Position');
+const FlightEvent = require('./schemas/FlightEvent');
+const FlightStat = require('./schemas/FlightStat');
+const WeaponStat = require('./schemas/WeaponStat');
+
 const Pilot = require('./schemas/Pilot');
 const AircraftModel = require('./schemas/AircraftModel');
 
@@ -12,247 +16,234 @@ udpserver.on('error', (err) => {
     udpServer.close();
 });
 
-const missionEventListener = (msg, rinfo) => {
+const findOrCreatePilot = userName => {
+    return new Promise((resolve, reject) => {
+        Pilot.findOne({userName: userName}).then((pilot) => {
+            if (!pilot) new Pilot({userName: userName}).save(newPilot).then(resolve(newPilot));
+            else resolve(pilot);
+        });
+    })
+}
 
-    setTimeout(() => {
+const mainFunction = msg => {
 
-        console.log(msg + ' from ' + rinfo.address + ':' + rinfo.port);
+    const data = msg.toString('utf-8').split(',');
+    const eventType = data[1];
+    const aircraftModel = data[5];
+    const userName = data[6];
+    const weaponType =  data[7];
+    const weaponName = data[8];
 
-        const data = msg.toString('utf-8').split(',');
-        const eventType = data[1];
-        const aircraftModel = data[5];
-        const userName = data[6];
-        const weaponType =  data[7];
-        const weaponName = data[8];
+    if (eventType == 'S_EVENT_MISSION_START' || eventType == 'S_EVENT_MISSION_END') {
+        //Restart positions
+        Position.deleteMany().then(() => console.log('Map positions removed!!!'));
+        return;
+    }
+    
+    //AircraftModel.findOne({name:aircraftModel}).then(am => {
+    //    if (!am) new AircraftModel({name: aircraftModel}).update().then(() => console.log('Aircraft model added'));
+    //});
 
-        if (eventType == 'S_EVENT_MISSION_START' || eventType == 'S_EVENT_MISSION_END') {
-            //Restart positions
-            Position.deleteMany().then(() => console.log('Map positions removed!!!'));
-            return;
-        }
-        
-        //AircraftModel.findOne({name:aircraftModel}).then(am => {
-        //    if (!am) new AircraftModel({name: aircraftModel}).update().then(() => console.log('Aircraft model added'));
-        //});
+    if (userName == 'AI') return;
 
-        if (userName == 'AI') return;
+        Promise.all([findOrCreatePilot(userName)]).then(responses => {
 
-        Pilot.findOne({userName: userName}).then(eventPilot => {
-        
-            new Promise((resolve, reject) => {
-                try {
-                    if (!eventPilot) {
-                        new Pilot({ 
-                            userName: userName, 
-                            stats: [{crashs:0, deads: 0, takeOffs: 0, landings: 0, flightTime: 0, aircraftModel: aircraftModel, weaponStats: []}], 
-                            flightEvents: [], currentFlightEvents: []
-                        }).save().then((newPilot) => {
-                            console.log('New pilot added');
-                            resolve(newPilot)
-                        });
+            const pilot = responses[0];
+
+            if (eventType == 'S_EVENT_BIRTH' || eventType == 'S_EVENT_BIRTH_AIRBORNE') {
+
+                FlightStat.exists({pilot: pilot._id, aircraftModel: aircraftModel}).then(exist => {
+                    if (!exist) new FlightStat({pilot: pilot._id, crashs:0, deads: 0, takeOffs: 0, landings: 0, flightTime: 0, ejections: 0, aircraftModel: aircraftModel}).save().then(console.log('FlightStat added'));
+                });
+
+                FlightEvent.insertMany([
+                    { pilot: pilot._id, eventType:'S_JOIN_MISSION', aircraftModel: aircraftModel, date: new Date(), temp: false },
+                    { pilot: pilot._id, eventType:'S_JOIN_MISSION', aircraftModel: aircraftModel, date: new Date(), temp: true }
+                ]).then(console.log('FlightEvent added'));
+
+            } else if (eventType == 'S_EVENT_TAKEOFF') {
+
+                FlightStat.findOne({pilot: pilot._id, aircraftModel: aircraftModel}).then(stat => {
+                    if (!stat) {
+                        new FlightStat({pilot: pilot._id, crashs:0, deads: 0, takeOffs: 1, landings: 0, flightTime: 0, ejections: 0, aircraftModel: aircraftModel}).save().then(console.log('FlightStat added'));
                     } else {
-                        resolve(eventPilot);
+                        stat.takeOffs++;
+                        stat.save().then(console.log('FlightStat updated'));
                     }
-                } catch(error) {
-                    reject(error);
-                }
+                })
+
+                FlightEvent.insertMany([
+                    { pilot: pilot._id, eventType:'S_EVENT_TAKEOFF', aircraftModel: aircraftModel, date: new Date(), temp: false },
+                    { pilot: pilot._id, eventType:'S_EVENT_TAKEOFF', aircraftModel: aircraftModel, date: new Date(), temp: true }
+                ]).then();
+
+                return;
+
+            } else if (eventType == 'S_EVENT_LAND') {
+
+                let currentDate = new Date(); 
+
+                //Flight Time
                 
-            }).then(pilot => {
+                FlightEvent.findOne({pilot: pilot._id, aircraftModel: aircraftModel, temp: true, eventType: {$in: ['S_EVENT_TAKEOFF', 'S_EVENT_BIRTH', 'S_EVENT_BIRTH_AIRBORNE']}}).then(tkEvent => {
 
-                if (eventType == 'S_EVENT_BIRTH' || eventType == 'S_EVENT_BIRTH_AIRBORNE') {
-
-                    let stat = pilot.stats.find(s => s.aircraftModel == aircraftModel);
-                    if (!stat) pilot.stats.push({crashs:0, deads: 0, takeOffs: 0, landings: 0, flightTime: 0, ejections: 0, aircraftModel: aircraftModel, weaponStats: []});
-
-                    pilot.flightEvents.push({eventType:'S_JOIN_MISSION', aircraftModel: aircraftModel, date: new Date()});
-                    pilot.currentFlightEvents.push({eventType:'S_JOIN_MISSION', aircraftModel: aircraftModel, date: new Date()});
-
-                    pilot.save().then(() => console.log('Pilot updated'));
-
-                    return;         
-    
-                } else if (eventType == 'S_EVENT_TAKEOFF') {
-    
-                    let stat = pilot.stats.find(s => s.aircraftModel == aircraftModel);
-                    if (!stat) {
-                        stat = {crashs:0, deads: 0, takeOffs: 0, landings: 0, flightTime: 0, ejections: 0, aircraftModel: aircraftModel, weaponStats: []};
-                        pilot.stats.push(stat);
-                    }
-                    stat.takeOffs++;
-    
-                    pilot.flightEvents.push({eventType:'S_EVENT_TAKEOFF', aircraftModel: aircraftModel, date: new Date()});
-                    pilot.currentFlightEvents.push({eventType:'S_EVENT_TAKEOFF', aircraftModel: aircraftModel, date: new Date()});
-    
-                    pilot.save().then(() => console.log('Pilot saved'));
-    
-                    return;
-    
-                } else if (eventType == 'S_EVENT_LAND') {
-    
-                    let currentDate = new Date(); 
-    
-                    //Flight Time
-                    let currentEvents = pilot.currentFlightEvents.filter(fe => fe.aircraftModel == aircraftModel);
-                    let stat = pilot.stats.find(s => s.aircraftModel == aircraftModel);
-                    if (!stat) {
-                        stat = {crashs:0, deads: 0, takeOffs: 0, landings: 0, flightTime: 0, ejections: 0, aircraftModel: aircraftModel, weaponStats: []};
-                        pilot.stats.push(stat);
-                    }
-    
-                    let tkEvent = currentEvents.find(e => e.eventType == 'S_EVENT_TAKEOFF' || e.eventType == 'S_EVENT_BIRTH' || e.eventType == 'S_EVENT_BIRTH_AIRBORNE');
-    
                     let secondsFlight = moment(currentDate).diff(moment(tkEvent.date), 'seconds');
-    
-                    stat.flightTime = stat.flightTime + secondsFlight;
-    
-                    //Landing count
-                    stat.landings++;
-    
-                    pilot.currentFlightEvents = [];
-                    pilot.flightEvents.push({eventType:'S_EVENT_LAND', aircraftModel: aircraftModel, date: new Date()});
-                    
-                    pilot.save().then(() => console.log('Pilot saved'));
-    
-                    return;
-                    
-                } else if (eventType == 'S_EVENT_SHOT') {
-    
-                    //2336,S_EVENT_SHOT,16799745,blue,AIRPLANE,FA-18C_hornet,[CETAV] - emucho,ROCKET,HYDRA-70 MK5,,,,, from 192.168.0.39:62470
-            //2741,S_EVENT_SHOT,16799745,blue,AIRPLANE,FA-18C_hornet,[CETAV] - emucho,BOMB,Mk-82,,,,, from 192.168.0.39:61697
-            //2747,S_EVENT_HIT,16799745,blue,AIRPLANE,FA-18C_hornet,[CETAV] - emucho,BOMB,Mk-82,16797697,blue,GROUND,Conventional_Circle_A,AI from 192.168.0.39:61699
-            //2947,S_EVENT_LAND,16799745,blue,AIRPLANE,FA-18C_hornet,[CETAV] - emucho,No Weapon,No Weapon,,,,, from 192.168.0.39:51090
-            //226,S_EVENT_EJECTION,16777728,blue,AIRPLANE,F-14B,AI,No Weapon,No Weapon,,,,, from 192.168.0.39:54465
-    
-                    const event = {eventType:'S_EVENT_SHOT', aircraftModel: aircraftModel, weaponType: weaponType, weaponName: weaponName, date: new Date()};
-                    pilot.currentFlightEvents.push(event);
-                    pilot.flightEvents.push(event);
-    
-                    let stat = pilot.stats.find(s => s.aircraftModel == aircraftModel);
-                    if (!stat) {
-                        stat = {crashs:0, deads: 0, takeOffs: 0, landings: 0, flightTime: 0, ejections: 0, aircraftModel: aircraftModel, weaponStats: []};
-                        pilot.stats.push(stat);
-                    }
-    
-                    let weaponStat = stat.weaponStats.find(ws => ws.weaponName == weaponName && ws.weaponType == weaponType);
-                    if (!weaponStat) {
-                        weaponStat = { weaponType: weaponType, weaponName: weaponName, fireTime: 1, hitTime: 0 };
-                        stat.weaponStats.push(weaponStat);
-                    }
-                    weaponStat.fireTime++;
-    
-                    pilot.save().then(() => console.log('Pilot saved'));
-    
-                    return;
-    
-                } else if (eventType == 'S_EVENT_HIT') {
-    
-                    const event = { eventType:'S_EVENT_HIT', aircraftModel: aircraftModel, weaponType: weaponType, 
-                        weaponName: weaponName, target: {coalition: data[10], group: data[11], name: data[12], modelType: data[13]}, date: new Date() };
-    
-                    pilot.currentFlightEvents.push(event);
-                    pilot.flightEvents.push(event);
-    
-                    let stat = pilot.stats.find(s => s.aircraftModel == aircraftModel);
-                    if (!stat) {
-                        stat = {crashs:0, deads: 0, takeOffs: 0, landings: 0, flightTime: 0, ejections: 0, aircraftModel: aircraftModel, weaponStats: [{ weaponType: weaponType, weaponName: weaponName, fireTime: 0, hitTime: 0 }]};
-                        pilot.stats.push(stat);
-                    }
-                    let weaponStat = stat.weaponStats.find(ws => ws.weaponName == weaponName && ws.weaponType == weaponType);
-                    weaponStat.hitTime++;
-    
-                    pilot.save().then(() => console.log('Pilot updated'));
-    
-                    return;
-    
-                } else if (eventType == 'S_EVENT_PILOT_DEAD') {
-    
-                    let stat = pilot.stats.find(s => s.aircraftModel == aircraftModel);
-                    if (!stat) {
-                        stat = {crashs:0, deads: 0, takeOffs: 0, landings: 0, flightTime: 0, ejections: 0, aircraftModel: aircraftModel, weaponStats: []};
-                        pilot.stats.push(stat);
-                    }
-                    stat.deads++;
-    
-                    pilot.currentFlightEvents = [];
-                    pilot.flightEvents.push({ eventType:'S_EVENT_PILOT_DEAD', aircraftModel: aircraftModel, date: new Date()});
-    
-                    pilot.save().then(() => console.log('Pilot saved'));
-    
-                    Position.deleteMany({userName: userName}).then(() => console.log('Position removed'));
-    
-                    return;
-    
-                } else if (eventType == 'S_EVENT_CRASH') {
-    
-                    let stat = pilot.stats.find(s => s.aircraftModel == aircraftModel);
-                    if (!stat) {
-                        stat = {crashs:0, deads: 0, takeOffs: 0, landings: 0, flightTime: 0, ejections: 0, aircraftModel: aircraftModel, weaponStats: []};
-                        pilot.stats.push(stat);
-                    }
-                    stat.crashs++;
-    
-                    pilot.currentFlightEvents = [];
-                    pilot.flightEvents.push({ eventType:'S_EVENT_CRASH', aircraftModel: aircraftModel, date: new Date()});
-    
-                    pilot.save().then(() => console.log('Pilot updated'));
-    
-                    Position.deleteMany({userName: userName}).then(() => console.log('Position removed'));
-    
-                    return;
-    
-                } else if (eventType == 'S_EVENT_EJECTION') {
-    
-                    let stat = pilot.stats.find(s => s.aircraftModel == aircraftModel);
-                    if (!stat) {
-                        stat = {crashs:0, deads: 0, takeOffs: 0, landings: 0, flightTime: 0, ejections: 0, aircraftModel: aircraftModel, weaponStats: []};
-                        pilot.stats.push(stat);
-                    }
-                    stat.ejections++;
-    
-                    pilot.currentFlightEvents = [];
-                    pilot.flightEvents.push({ eventType:'S_EVENT_EJECTION', aircraftModel: aircraftModel, date: new Date()});
-    
-                    pilot.save().then(() => console.log('Pilot updated'));
-    
-                    Position.deleteMany({userName: userName}).then(() => console.log('Position removed'));
-    
-                    return;
+
+                    FlightStat.findOne({pilot: pilot._id, aircraftModel: aircraftModel}).then(stat => {
+                        if (!stat) {
+                            new FlightStat({pilot: pilot, crashs:0, deads: 0, takeOffs: 0, landings: 1, flightTime: 0, ejections: 0, aircraftModel: aircraftModel}).save().then(console.log('FlightStat added'));
+                        } else {
+                            stat.landings++;
+                            stat.flightTime = stat.flightTime + secondsFlight;
+                            stat.save().then(console.log('FlightStat updated'));
+                        }
+                    })
+                  
+                    FlightEvent.deleteMany({pilot: pilot, aircraftModel: aircraftModel, temp: true}).then();
+                })
+
+                new FlightEvent({ pilot: pilot, eventType:'S_EVENT_LAND', aircraftModel: aircraftModel, date: new Date(), temp: false }).save().then();
+
+                return;
                 
-                } else if(eventType == 'S_EVENT_PLAYER_COMMENT') {
-    
-                    pilot.currentFlightEvents = [];
-                    pilot.flightEvents.push({ eventType:'S_LEAVE_MISSION', aircraftModel: aircraftModel, date: new Date()});
-    
-                    pilot.save().then(() => console.log('Pilot updated'));
-    
-                    Position.deleteMany({userName: userName}).then(() => console.log('Position removed'));
-    
-                    return;
-                }
+            } else if (eventType == 'S_EVENT_SHOT') {
 
-            }, error => {
-                console.error(error);
-            });
+                //2336,S_EVENT_SHOT,16799745,blue,AIRPLANE,FA-18C_hornet,[CETAV] - emucho,ROCKET,HYDRA-70 MK5,,,,, from 192.168.0.39:62470
+        //2741,S_EVENT_SHOT,16799745,blue,AIRPLANE,FA-18C_hornet,[CETAV] - emucho,BOMB,Mk-82,,,,, from 192.168.0.39:61697
+        //2747,S_EVENT_HIT,16799745,blue,AIRPLANE,FA-18C_hornet,[CETAV] - emucho,BOMB,Mk-82,16797697,blue,GROUND,Conventional_Circle_A,AI from 192.168.0.39:61699
+        //2947,S_EVENT_LAND,16799745,blue,AIRPLANE,FA-18C_hornet,[CETAV] - emucho,No Weapon,No Weapon,,,,, from 192.168.0.39:51090
+        //226,S_EVENT_EJECTION,16777728,blue,AIRPLANE,F-14B,AI,No Weapon,No Weapon,,,,, from 192.168.0.39:54465
 
-            /*if (eventType == 'S_EVENT_BIRTH') {
+                WeaponStat.findOne({pilot: pilot, aircraftModel: aircraftModel, weaponType: weaponType, weaponName: weaponName}).then(weaponStat => {
+                    if (!weaponStat) {
+                        new WeaponStat({pilot: pilot, aircraftModel: aircraftModel, weaponType: weaponType, weaponName: weaponName, fireTime: 1, hitTime: 0}).save().then(console.log('FlightStat added'));
+                    } else {
+                        weaponStat.fireTime++;
+                        weaponStat.save().then(console.log('FlightStat updated'));
+                    }
+                });
 
-            } else if (eventType == 'S_EVENT_MISSION_START' || eventType == 'S_EVENT_MISSION_END') {
+                FlightEvent.insertMany([
+                    { eventType:'S_EVENT_SHOT', aircraftModel: aircraftModel, weaponType: weaponType, weaponName: weaponName, date: new Date(), temp: false },
+                    { eventType:'S_EVENT_SHOT', aircraftModel: aircraftModel, weaponType: weaponType, weaponName: weaponName, date: new Date(), temp: true }
+                ]).then();
+                    
+                return;
 
-            } else if (eventType.eventType == 'S_EVENT_PLAYER_COMMENT') {
-                //Cuando se regresa a expectadores se lanzan los 3 eventos
-                //S_EVENT_PLAYER_COMMENT
-                //S_EVENT_PILOT_DEAD
-                //S_EVENT_DEAD
+            } else if (eventType == 'S_EVENT_HIT') {
 
-                //Cuando te estrellas 
-                //S_EVENT_PILOT_DEAD
-                //S_EVENT_CRASH
-            }*/
+                WeaponStat.findOne({pilot: pilot, aircraftModel: aircraftModel, weaponType: weaponType, weaponName: weaponName}).then(weaponStat => {
+                    if (!weaponStat) {
+                        new WeaponStat({pilot: pilot._id, aircraftModel: aircraftModel, weaponType: weaponType, weaponName: weaponName, fireTime: 0, hitTime: 1}).save().then(console.log('FlightStat added'));
+                    } else {
+                        weaponStat.hitTime++;
+                        weaponStat.save().then(console.log('FlightStat updated'));
+                    }
+                })
+
+                FlightEvent.insertMany([
+                    { eventType:'S_EVENT_HIT', aircraftModel: aircraftModel, weaponType: weaponType, 
+                        weaponName: weaponName, target: {coalition: data[10], group: data[11], name: data[12], modelType: data[13]}, date: new Date(), temp: false },
+                    { eventType:'S_EVENT_HIT', aircraftModel: aircraftModel, weaponType: weaponType, 
+                        weaponName: weaponName, target: {coalition: data[10], group: data[11], name: data[12], modelType: data[13]}, date: new Date(), temp: true },
+                ]).then();
+
+                return;
+
+            } else if (eventType == 'S_EVENT_PILOT_DEAD') {
+
+                FlightStat.findOne({pilot: pilot._id, aircraftModel: aircraftModel}).then(stat => {
+                    if (!stat) {
+                        new FlightStat({pilot: pilot._id, crashs:0, deads: 1, takeOffs: 0, landings: 0, flightTime: 0, ejections: 0, aircraftModel: aircraftModel}).save().then(console.log('FlightStat added'));
+                    } else {
+                        stat.deads++;
+                        stat.save().then(console.log('FlightStat updated'));
+                    }
+                });
+
+                new FlightEvent({ pilot: pilot._id, eventType:'S_EVENT_PILOT_DEAD', aircraftModel: aircraftModel, date: new Date(), temp: false }).save().then();
+                FlightEvent.deleteMany({pilot: pilot._id, aircraftModel: aircraftModel, temp: true}).then();
+
+                Position.deleteMany({userName: userName}).then();
+
+                return;
+
+            } else if (eventType == 'S_EVENT_CRASH') {
+
+                FlightStat.findOne({pilot: pilot._id, aircraftModel: aircraftModel}).then(stat => {
+                    if (!stat) {
+                        new FlightStat({pilot: pilot._id, crashs:1, deads: 0, takeOffs: 0, landings: 0, flightTime: 0, ejections: 0, aircraftModel: aircraftModel}).save().then(console.log('FlightStat added'));
+                    } else {
+                        stat.crashs++;
+                        stat.save().then(console.log('FlightStat updated'));
+                    }
+                });
+
+                new FlightEvent({ pilot: pilot._id, eventType:'S_EVENT_CRASH', aircraftModel: aircraftModel, date: new Date(), temp: false }).save().then();
+                FlightEvent.deleteMany({pilot: pilot._id, aircraftModel: aircraftModel, temp: true}).then();
+
+                Position.deleteMany({userName: userName}).then();
+
+                return;
+
+            } else if (eventType == 'S_EVENT_EJECTION') {
+
+                FlightStat.findOne({pilot: pilot._id, aircraftModel: aircraftModel}).then(stat => {
+                    if (!stat) {
+                        new FlightStat({pilot: pilot._id, crashs:0, deads: 0, takeOffs: 0, landings: 0, flightTime: 0, ejections: 1, aircraftModel: aircraftModel}).save().then(console.log('FlightStat added'));
+                    } else {
+                        stat.ejections++;
+                        stat.save().then(console.log('FlightStat updated'));
+                    }
+                });
+
+                new FlightEvent({ pilot: pilot._id, eventType:'S_EVENT_EJECTION', aircraftModel: aircraftModel, date: new Date(), temp: false }).save().then();
+                FlightEvent.deleteMany({pilot: pilot._id, aircraftModel: aircraftModel, temp: true}).then();
+
+                Position.deleteMany({userName: userName}).then();
+
+                return;
+            
+            } else if(eventType == 'S_EVENT_PLAYER_COMMENT') {
+
+                new FlightEvent({ pilot: pilot._id, eventType:'S_LEAVE_MISSION', aircraftModel: aircraftModel, date: new Date(), temp: false }).save().then();
+                FlightEvent.deleteMany({pilot: pilot._id, aircraftModel: aircraftModel, temp: true}).then();
+
+                Position.deleteMany({userName: userName}).then();
+
+                return;
+            }
+
         });
 
-    }, 1000);
+        /*if (eventType == 'S_EVENT_BIRTH') {
 
-    
+        } else if (eventType == 'S_EVENT_MISSION_START' || eventType == 'S_EVENT_MISSION_END') {
+
+        } else if (eventType.eventType == 'S_EVENT_PLAYER_COMMENT') {
+            //Cuando se regresa a expectadores se lanzan los 3 eventos
+            //S_EVENT_PLAYER_COMMENT
+            //S_EVENT_PILOT_DEAD
+            //S_EVENT_DEAD
+
+            //Cuando te estrellas 
+            //S_EVENT_PILOT_DEAD
+            //S_EVENT_CRASH
+        }*/
+} 
+
+const missionEventListener = (msg, rinfo) => {
+
+    setTimeout(() => mainFunction(msg), 1000);
+}
+
+findOrCreateAircrafModel = aircraftModel => {
+    return new Promise((resolve, reject) => {
+        AircraftModel.findOne({name: aircraftModel}).then((am) => {
+            if (!am) new AircraftModel({name: aircraftModel}).save(newAm).then(resolve(newAm));
+            else resolve(am);
+        });
+    })
 }
 
 udpserver.on('message', missionEventListener);

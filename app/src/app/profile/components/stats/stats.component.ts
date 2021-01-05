@@ -1,53 +1,47 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
+import { Subscription } from 'rxjs';
+import { FlightStatsService } from 'src/app/common/services/flight-stats.service';
 
 @Component({
   selector: 'app-stats',
   templateUrl: './stats.component.html',
   styleUrls: ['./stats.component.css']
 })
-export class StatsComponent implements OnInit {
+export class StatsComponent implements OnInit, OnDestroy {
 
-  stats = [];
-  @Input() pilot;
+  data = { length: null, datasource: null};
   
   pageSize = 2;
   pageEvent: PageEvent;
 
-  datasource = [];
+  subs: Subscription;
 
-  constructor() { }
+  constructor(private flightStatsService: FlightStatsService) { }
 
   ngOnInit(): void { 
 
-    const totStat = {
-      aircraftModel:'Totales',
-      flightTime: 0, takeOffs: 0, landings: 0,
-      deads: 0, crashs: 0, ejects: 0
-    };
+    this.getPaginatedData();
 
-    this.stats = [...this.pilot.stats];
-    
-    this.stats.forEach(st => {
-      totStat.flightTime += st.flightTime;
-      totStat.takeOffs += st.takeOffs;
-      totStat.landings += st.landings;
-      totStat.deads += st.deads;
-      totStat.crashs += st.crashs;
-      totStat.ejects += st.ejects;
-    });
-
-    this.stats.unshift(totStat);
-
-    this.getPaginatedData(); 
+    this.subs = this.flightStatsService.flightStatsRefresh.subscribe(() => {
+      this.getPaginatedData();
+    })
   }
 
   getPaginatedData(event?:PageEvent) {
 
-    if (!event) this.datasource = this.stats.slice(0, 2);
-    else this.datasource = this.stats.slice(event.pageIndex * event.pageSize, (event.pageIndex * event.pageSize) + event.pageSize);
+    let pageIndex = event ? event.pageIndex : 0;
+    
+    this.flightStatsService.getFlightStatsFromPilot(pageIndex, this.pageSize).subscribe((response:any) => {
+      this.data.length = response.length;
+      this.data.datasource = response.datasource;
+    });
     
     return event;
+  }
+
+  ngOnDestroy() {
+    this.subs.unsubscribe();
   }
 
 }

@@ -1,47 +1,48 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
-import * as _ from 'lodash';
-import * as moment from 'moment';
+import { Subscription } from 'rxjs';
+import { FlightEventsService } from 'src/app/common/services/flight-events.service';
 
 @Component({
   selector: 'app-logbook',
   templateUrl: './logbook.component.html',
   styleUrls: ['./logbook.component.css']
 })
-export class LogbookComponent implements OnInit {
-
-  @Input() pilot;
+export class LogbookComponent implements OnInit, OnDestroy {
 
   pageSize = 5;
   pageEvent: PageEvent;
 
-  datasource = [];
-  timeLineEvents = [];
+  data = { length: null, datasource: null};
   
-  constructor() { }
+  subs: Subscription;
+  
+  constructor(private flightEventsService: FlightEventsService) { }
 
   ngOnInit(): void {
-
-    this.timeLineEvents = [];
       
-    const result = _.groupBy(this.pilot.flightEvents, this.monthName);
-    for (const prop in result) {
-      this.timeLineEvents.unshift({
-        date: moment(prop, 'DD/MM/yyyy').toDate(), 
-        events: result[prop].map(el => { el.date = moment(el.date).toDate(); return el; })
-      });
-    }
-
     this.getPaginatedData();
-  }
 
-  private monthName = fe => moment(fe.date, 'YYYY-MM-DD').format('DD/MM/yyyy');
+    this.subs = this.flightEventsService.flightEventRefresh.subscribe(() => {
+      this.getPaginatedData();
+    })
+
+  }
 
   getPaginatedData(event?:PageEvent) {
 
-    if (!event) this.datasource = this.timeLineEvents.slice(0, 5);
-    else this.datasource = this.timeLineEvents.slice(event.pageIndex * event.pageSize, (event.pageIndex * event.pageSize) + event.pageSize);
+    let pageIndex = event ? event.pageIndex : 0;
+    
+    this.flightEventsService.getFlightEventsFromPilot(pageIndex, this.pageSize).subscribe((response:any) => {
+      this.data.length = response.length;
+      this.data.datasource = response.datasource;
+    });
     
     return event;
   }
+
+  ngOnDestroy() {
+    this.subs.unsubscribe();
+  }
+
 }
