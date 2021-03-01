@@ -9,6 +9,22 @@ const ObjectId = require('mongoose').Types.ObjectId;
 
 const Mission = require('../../schemas/Mission');
 
+const sendMissionAlertToDiscord = (mission, req) => {
+    const misionesChannel = discordBot.channels.cache.find(channel => channel.name === process.env.MIISSION_CHANNEL_ALERTS);
+    
+    const embed = new MessageEmbed()
+        .setColor('#0099ff')
+        .setTitle(mission.title + ' (aquí)')
+        .setURL(mission.googleDocsLink)
+        .setAuthor(mission.user.userName, mission.user.avatar)
+        .setDescription(mission.description)
+        .setThumbnail('http://' + req.get('host') + '/assets/images/DCS_World_logo.png')
+        .addFields( { name: '@everyone', value: 'La misión se vuela el día: ' + moment(mission.date).format('D/MM/yyyy') + '. Anotate!' } )
+        .setTimestamp()
+        .setFooter('sim-dcs', 'http://' + req.get('host') + '/assets/images/DCS_World_logo.png');
+
+    misionesChannel.send(embed);
+}
 
 apiRestMission.get('/:userId', (req, res) => {
     Mission.find({'user': new ObjectId(req.params.userId) }).then(missions => res.json(missions));
@@ -38,7 +54,7 @@ apiRestMission.put('/:id', (req, res) => {
             
             if (publishToDiscord) {
                 sm.populate('user').execPopulate().then((pm) => {
-                    sentMissionAlertToDiscord(pm, req);
+                    sendMissionAlertToDiscord(pm, req);
                     res.json();
                 });
             } else {
@@ -78,7 +94,7 @@ apiRestMission.post('/', (req, res) => {
 
         if (publish) {
             mission.populate('user').execPopulate().then((pm) => {
-                sentMissionAlertToDiscord(pm, req);
+                sendMissionAlertToDiscord(pm, req);
                 res.json();
             });
 
@@ -89,22 +105,5 @@ apiRestMission.post('/', (req, res) => {
     });
 
 });
-
-sentMissionAlertToDiscord = (mission, req) => {
-    const misionesChannel = discordBot.channels.cache.find(channel => channel.name === process.env.MIISSION_CHANNEL_ALERTS);
-    
-    const embed = new MessageEmbed()
-        .setColor('#0099ff')
-        .setTitle(mission.title + ' (aquí)')
-        .setURL(mission.googleDocsLink)
-        .setAuthor(mission.user.userName, mission.user.avatar)
-        .setDescription(mission.description)
-        .setThumbnail('http://' + req.get('host') + '/assets/images/DCS_World_logo.png')
-        .addFields( { name: '@everyone', value: 'La misión se vuela el día: ' + moment(mission.date).format('D/MM/yyyy') + '. Anotate!' } )
-        .setTimestamp()
-        .setFooter('sim-dcs', 'http://' + req.get('host') + '/assets/images/DCS_World_logo.png');
-
-    misionesChannel.send(embed);
-}
 
 module.exports = apiRestMission;

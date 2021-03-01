@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 const discordBot = new Discord.Client();
 
-discordBot.on('ready', () => console.log('Discord bot is connected'));
+discordBot.on('ready', () => console.log('Discord bot is connected.'));
 
 discordBot.on('message', (message) => {
     //console.log(message.author.username + ' ha dicho: \"' + message.content + '\"');

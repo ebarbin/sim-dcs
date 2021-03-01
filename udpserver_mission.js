@@ -1,20 +1,16 @@
-var net = require('dgram');
-var moment = require('moment');
+const net = require('dgram');
+const udpserver = net.createSocket('udp4');
+
+const moment = require('moment');
 
 const Position = require('./schemas/Position');
 const FlightEvent = require('./schemas/FlightEvent');
 const FlightStat = require('./schemas/FlightStat');
 const WeaponStat = require('./schemas/WeaponStat');
-
 const Pilot = require('./schemas/Pilot');
-const AircraftModel = require('./schemas/AircraftModel');
 
-var udpserver = net.createSocket('udp4');
-
-udpserver.on('error', (err) => {
-    console.log('server error:\n ' + err.stack);
-    udpServer.close();
-});
+const discordBot = require('./discord-bot');
+const MessageEmbed = require('discord.js').MessageEmbed;
 
 const findOrCreatePilot = userName => {
     return new Promise((resolve, reject) => {
@@ -23,6 +19,38 @@ const findOrCreatePilot = userName => {
             else resolve(pilot);
         });
     })
+}
+
+const serverStatusUpDiscordMessage = () => {
+    
+    const statusChannel = discordBot.channels.cache.find(channel => channel.name === process.env.SERVER_STATUS_CHANNEL );
+    
+    //Clear status channel
+    statusChannel.messages.fetch().then(messages => { messages.forEach(msg => msg.delete()) });
+
+    const embed = new MessageEmbed()
+        .setTitle('Servidor en línea')
+        .setColor('#00830b')
+        .setTimestamp()
+        .setFooter('sim-dcs', process.env.PUBLIC_URL + '/assets/images/DCS_World_logo.png');
+       
+       statusChannel.send(embed);
+}
+
+const serverStatusDownDiscordMessage = () => {
+    
+    const statusChannel = discordBot.channels.cache.find(channel => channel.name === process.env.SERVER_STATUS_CHANNEL );
+    
+    //Clear status channel
+    statusChannel.messages.fetch().then(messages => { messages.forEach(msg => msg.delete()) });
+
+    const embed = new MessageEmbed()
+        .setTitle('Servidor fuera de línea')
+        .setColor('#c90000')
+        .setTimestamp()
+        .setFooter('sim-dcs', process.env.PUBLIC_URL + '/assets/images/DCS_World_logo.png');
+       
+       statusChannel.send(embed);
 }
 
 const mainFunction = msg => {
@@ -34,15 +62,17 @@ const mainFunction = msg => {
     const weaponType =  data[7];
     const weaponName = data[8];
 
-    if (eventType == 'S_EVENT_MISSION_START' || eventType == 'S_EVENT_MISSION_END') {
+    if (eventType == 'S_EVENT_MISSION_START') {
+        serverStatusUpDiscordMessage();
+        //Restart positions
+        Position.deleteMany().then(() => console.log('Map positions removed!!!'));
+        return;
+    } else if (eventType == 'S_EVENT_MISSION_END') {
+        serverStatusDownDiscordMessage();
         //Restart positions
         Position.deleteMany().then(() => console.log('Map positions removed!!!'));
         return;
     }
-    
-    //AircraftModel.findOne({name:aircraftModel}).then(am => {
-    //    if (!am) new AircraftModel({name: aircraftModel}).update().then(() => console.log('Aircraft model added'));
-    //});
 
     if (userName == 'AI') return;
 
@@ -77,13 +107,9 @@ const mainFunction = msg => {
                     { pilot: pilot._id, eventType:'S_EVENT_TAKEOFF', aircraftModel: aircraftModel, date: new Date(), temp: true }
                 ]).then();
 
-                return;
-
             } else if (eventType == 'S_EVENT_LAND') {
 
                 let currentDate = new Date(); 
-
-                //Flight Time
                 
                 FlightEvent.findOne({pilot: pilot._id, aircraftModel: aircraftModel, temp: true, eventType: {$in: ['S_EVENT_TAKEOFF', 'S_EVENT_BIRTH', 'S_EVENT_BIRTH_AIRBORNE']}}).then(tkEvent => {
 
@@ -103,16 +129,8 @@ const mainFunction = msg => {
                 })
 
                 new FlightEvent({ pilot: pilot, eventType:'S_EVENT_LAND', aircraftModel: aircraftModel, date: new Date(), temp: false }).save().then();
-
-                return;
                 
             } else if (eventType == 'S_EVENT_SHOT') {
-
-                //2336,S_EVENT_SHOT,16799745,blue,AIRPLANE,FA-18C_hornet,[CETAV] - emucho,ROCKET,HYDRA-70 MK5,,,,, from 192.168.0.39:62470
-        //2741,S_EVENT_SHOT,16799745,blue,AIRPLANE,FA-18C_hornet,[CETAV] - emucho,BOMB,Mk-82,,,,, from 192.168.0.39:61697
-        //2747,S_EVENT_HIT,16799745,blue,AIRPLANE,FA-18C_hornet,[CETAV] - emucho,BOMB,Mk-82,16797697,blue,GROUND,Conventional_Circle_A,AI from 192.168.0.39:61699
-        //2947,S_EVENT_LAND,16799745,blue,AIRPLANE,FA-18C_hornet,[CETAV] - emucho,No Weapon,No Weapon,,,,, from 192.168.0.39:51090
-        //226,S_EVENT_EJECTION,16777728,blue,AIRPLANE,F-14B,AI,No Weapon,No Weapon,,,,, from 192.168.0.39:54465
 
                 WeaponStat.findOne({pilot: pilot, aircraftModel: aircraftModel, weaponType: weaponType, weaponName: weaponName}).then(weaponStat => {
                     if (!weaponStat) {
@@ -127,8 +145,6 @@ const mainFunction = msg => {
                     { eventType:'S_EVENT_SHOT', aircraftModel: aircraftModel, weaponType: weaponType, weaponName: weaponName, date: new Date(), temp: false },
                     { eventType:'S_EVENT_SHOT', aircraftModel: aircraftModel, weaponType: weaponType, weaponName: weaponName, date: new Date(), temp: true }
                 ]).then();
-                    
-                return;
 
             } else if (eventType == 'S_EVENT_HIT') {
 
@@ -148,8 +164,6 @@ const mainFunction = msg => {
                         weaponName: weaponName, target: {coalition: data[10], group: data[11], name: data[12], modelType: data[13]}, date: new Date(), temp: true },
                 ]).then();
 
-                return;
-
             } else if (eventType == 'S_EVENT_PILOT_DEAD') {
 
                 FlightStat.findOne({pilot: pilot._id, aircraftModel: aircraftModel}).then(stat => {
@@ -165,8 +179,6 @@ const mainFunction = msg => {
                 FlightEvent.deleteMany({pilot: pilot._id, aircraftModel: aircraftModel, temp: true}).then();
 
                 Position.deleteMany({userName: userName}).then();
-
-                return;
 
             } else if (eventType == 'S_EVENT_CRASH') {
 
@@ -184,8 +196,6 @@ const mainFunction = msg => {
 
                 Position.deleteMany({userName: userName}).then();
 
-                return;
-
             } else if (eventType == 'S_EVENT_EJECTION') {
 
                 FlightStat.findOne({pilot: pilot._id, aircraftModel: aircraftModel}).then(stat => {
@@ -201,8 +211,6 @@ const mainFunction = msg => {
                 FlightEvent.deleteMany({pilot: pilot._id, aircraftModel: aircraftModel, temp: true}).then();
 
                 Position.deleteMany({userName: userName}).then();
-
-                return;
             
             } else if(eventType == 'S_EVENT_PLAYER_COMMENT') {
 
@@ -210,47 +218,25 @@ const mainFunction = msg => {
                 FlightEvent.deleteMany({pilot: pilot._id, aircraftModel: aircraftModel, temp: true}).then();
 
                 Position.deleteMany({userName: userName}).then();
-
-                return;
             }
 
         });
-
-        /*if (eventType == 'S_EVENT_BIRTH') {
-
-        } else if (eventType == 'S_EVENT_MISSION_START' || eventType == 'S_EVENT_MISSION_END') {
-
-        } else if (eventType.eventType == 'S_EVENT_PLAYER_COMMENT') {
-            //Cuando se regresa a expectadores se lanzan los 3 eventos
-            //S_EVENT_PLAYER_COMMENT
-            //S_EVENT_PILOT_DEAD
-            //S_EVENT_DEAD
-
-            //Cuando te estrellas 
-            //S_EVENT_PILOT_DEAD
-            //S_EVENT_CRASH
-        }*/
 } 
 
 const missionEventListener = (msg, rinfo) => {
-
     setTimeout(() => mainFunction(msg), 1000);
-}
-
-findOrCreateAircrafModel = aircraftModel => {
-    return new Promise((resolve, reject) => {
-        AircraftModel.findOne({name: aircraftModel}).then((am) => {
-            if (!am) new AircraftModel({name: aircraftModel}).save(newAm).then(resolve(newAm));
-            else resolve(am);
-        });
-    })
 }
 
 udpserver.on('message', missionEventListener);
 
 udpserver.on('listening', () => {
     const address = udpserver.address();
-    console.log('UDP Server listening on', address.address + ':' + address.port);
+    console.log('Mission UDP Server listening on', address.address + ':' + address.port + '.');
+});
+
+udpserver.on('error', (err) => {
+    console.log('server error:\n ' + err.stack);
+    udpServer.close();
 });
 
 module.exports = udpserver;

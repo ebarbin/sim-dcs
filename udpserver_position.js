@@ -1,16 +1,9 @@
-var net = require('dgram');
-const mongoose = require('mongoose');
+const net = require('dgram');
+const udpserver = net.createSocket('udp4');
+
 const Position = require('./schemas/Position');
 
-var udpserver = net.createSocket('udp4');
-
-udpserver.on('error', (err) => {
-    console.log('server error:\n ' + err.stack);
-    udpServer.close();
-});
-
-udpserver.on('message', (msg, rinfo) => {
-    //console.log(msg + ' from ' + rinfo.address + ':' + rinfo.port);
+const mainFunction = msg => {
 
     //0 CurrentTime
     //1 Id
@@ -62,12 +55,23 @@ udpserver.on('message', (msg, rinfo) => {
             
         }
     })
+};
 
-});
+const missionEventListener = (msg, rinfo) => {
+
+    setTimeout(() => mainFunction(msg), 1000);
+}
+
+udpserver.on('message', missionEventListener);
 
 udpserver.on('listening', () => {
     const address = udpserver.address();
-    console.log('UDP Server listening on', address.address + ':' + address.port);
+    console.log('Position UDP Server listening on', address.address + ':' + address.port + '.');
+});
+
+udpserver.on('error', (err) => {
+    console.log('server error:\n ' + err.stack);
+    udpServer.close();
 });
 
 module.exports = udpserver;
