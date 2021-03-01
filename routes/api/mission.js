@@ -10,16 +10,20 @@ const ObjectId = require('mongoose').Types.ObjectId;
 const Mission = require('../../schemas/Mission');
 
 const sendMissionAlertToDiscord = (mission, req) => {
+
     const misionesChannel = discordBot.channels.cache.find(channel => channel.name === process.env.MIISSION_CHANNEL_ALERTS);
-    
+
+    const msg = mission.publish ? 'La misión se vuela el día: ' + moment(mission.date).format('D/MM/yyyy') + '. Anotate!' : 'Esta misión se ha quitado del cronograma.';
+    const color = mission.publish ? '#00830b': '#c90000';
+
     const embed = new MessageEmbed()
-        .setColor('#0099ff')
+        .setColor(color)
         .setTitle(mission.title + ' (aquí)')
         .setURL(mission.googleDocsLink)
         .setAuthor(mission.user.userName, mission.user.avatar)
         .setDescription(mission.description)
         .setThumbnail('http://' + req.get('host') + '/assets/images/DCS_World_logo.png')
-        .addFields( { name: '@everyone', value: 'La misión se vuela el día: ' + moment(mission.date).format('D/MM/yyyy') + '. Anotate!' } )
+        .addFields( { name: '@everyone', value: msg } )
         .setTimestamp()
         .setFooter('sim-dcs', 'http://' + req.get('host') + '/assets/images/DCS_World_logo.png');
 
@@ -38,9 +42,6 @@ apiRestMission.put('/:id', (req, res) => {
     const data = req.body;
 
     Mission.findById(new ObjectId(req.params.id)).then((mission) => {
-
-        console.log('current: ' + mission.publish);
-        console.log('new: ' + data.publish);
 
         let publishToDiscord = mission.publish != data.publish;
 
@@ -74,7 +75,7 @@ apiRestMission.post('/check-date', (req, res) => {
         date: { $gte: moment(date).startOf('day').toDate(), $lte: moment(date).endOf('day').toDate() }
     }).then(quantity => {
         if (quantity > 0) res.json({available: false });
-        res.json({available: true });
+        else res.json({available: true });
     })
 })
 
