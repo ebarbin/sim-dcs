@@ -142,8 +142,8 @@ const mainFunction = msg => {
                 });
 
                 FlightEvent.insertMany([
-                    { eventType:'S_EVENT_SHOT', aircraftModel: aircraftModel, weaponType: weaponType, weaponName: weaponName, date: new Date(), temp: false },
-                    { eventType:'S_EVENT_SHOT', aircraftModel: aircraftModel, weaponType: weaponType, weaponName: weaponName, date: new Date(), temp: true }
+                    { pilot: pilot, eventType:'S_EVENT_SHOT', aircraftModel: aircraftModel, weaponType: weaponType, weaponName: weaponName, date: new Date(), temp: false },
+                    { pilot: pilot, eventType:'S_EVENT_SHOT', aircraftModel: aircraftModel, weaponType: weaponType, weaponName: weaponName, date: new Date(), temp: true }
                 ]).then();
 
             } else if (eventType == 'S_EVENT_HIT') {
@@ -158,9 +158,9 @@ const mainFunction = msg => {
                 })
 
                 FlightEvent.insertMany([
-                    { eventType:'S_EVENT_HIT', aircraftModel: aircraftModel, weaponType: weaponType, 
+                    { pilot: pilot, eventType:'S_EVENT_HIT', aircraftModel: aircraftModel, weaponType: weaponType, 
                         weaponName: weaponName, target: {coalition: data[10], group: data[11], name: data[12], modelType: data[13]}, date: new Date(), temp: false },
-                    { eventType:'S_EVENT_HIT', aircraftModel: aircraftModel, weaponType: weaponType, 
+                    { pilot: pilot, eventType:'S_EVENT_HIT', aircraftModel: aircraftModel, weaponType: weaponType, 
                         weaponName: weaponName, target: {coalition: data[10], group: data[11], name: data[12], modelType: data[13]}, date: new Date(), temp: true },
                 ]).then();
 

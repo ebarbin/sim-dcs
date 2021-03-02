@@ -16,6 +16,8 @@ export class SessionService {
   
   isAuthenticated() {
 
+    console.log('is prod?: ' + environment.production);
+    
     if (this.user) return true;
     else if (environment.production) {
 

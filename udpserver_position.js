@@ -37,6 +37,8 @@ const mainFunction = msg => {
         altitude: Math.round(data[10] * 3.28084),
     });
 
+    if (newPosition.userName == 'none' && newPosition.groupName == 'none') return;
+
     Position.findOne({key: newPosition.key}).then((position) => {
 
         if (!position) {
@@ -58,7 +60,6 @@ const mainFunction = msg => {
 };
 
 const missionEventListener = (msg, rinfo) => {
-
     setTimeout(() => mainFunction(msg), 1000);
 }
 
