@@ -13,7 +13,7 @@ docker pull mongo //Para descargar la imagen de mongo.
 
 //Para mantener la informacion, hay que crear un volumen de dockers. Hay que crear la carpeta mongodata.
 
-docker run -p 27017:27017 -it -v mongodata:/data/db --rm --name mongodb -d mongo  //Para levantar un container con la imagen de mongo
+docker run -p 27017:27017 -it -v mongodata:/data/db --rm --name mongodb -d --network sim-dcs-net mongo  //Para levantar un container con la imagen de mongo
 
 docker exec -it mongodb bash //Si queremos ingresar a la consola de mongo.
 
@@ -25,3 +25,12 @@ git push -u origin main
 //git init
 //git branch -M main //crear branch local
 //git remote add origin https://github.com/ebarbin/sim-dcs.git
+
+
+//docker build . -t ebarbin/sim-dcs:0.0.1
+//docker run -p 8080:8080 -p 9181:9181/udp -p 9182:9182/udp --name sim-dcs -it --rm --network sim-dcs-net ebarbin/sim-dcs:0.0.1
+
+//docker build . -t ebarbin/sim-dcs:0.0.1-GIO --build-arg DEFAULT_URL=181.226.134.148
+//docker run -p 8080:8080 -p 9181:9181/udp -p 9182:9182/udp --name sim-dcs -it --rm --network sim-dcs-net ebarbin/sim-dcs:0.0.1-GIO
+
+//docker network create sim-dcs-net

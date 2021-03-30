@@ -34,7 +34,6 @@ apiRestFlightEvent.get('/:pilotId', (req, res) => {
         response.length = elements.length;
         response.datasource = elements.slice(page * limit, (page * limit) + limit);
 
-        console.log(response.datasource[0].events);
         res.json(response);
     });
 })

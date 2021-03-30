@@ -32,7 +32,7 @@ const serverStatusUpDiscordMessage = () => {
         .setTitle('Servidor en línea')
         .setColor('#00830b')
         .setTimestamp()
-        .setFooter('sim-dcs', process.env.PUBLIC_URL + '/assets/images/DCS_World_logo.png');
+        .setFooter('sim-dcs', 'http://' + process.env.PUBLIC_URL + ':' +  process.env.WEBSERVER_PORT + '/assets/images/DCS_World_logo.png');
        
        statusChannel.send(embed);
 }
@@ -48,7 +48,7 @@ const serverStatusDownDiscordMessage = () => {
         .setTitle('Servidor fuera de línea')
         .setColor('#c90000')
         .setTimestamp()
-        .setFooter('sim-dcs', process.env.PUBLIC_URL + '/assets/images/DCS_World_logo.png');
+        .setFooter('sim-dcs', 'http://' + process.env.PUBLIC_URL + ':' +  process.env.WEBSERVER_PORT + '/assets/images/DCS_World_logo.png');
        
        statusChannel.send(embed);
 }
@@ -224,6 +224,7 @@ const mainFunction = msg => {
 } 
 
 const missionEventListener = (msg, rinfo) => {
+    console.log(msg);
     setTimeout(() => mainFunction(msg), 1000);
 }
 

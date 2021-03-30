@@ -41,15 +41,16 @@ app.use('/auth', require('./routes/auth'));
 app.use(require('./routes/router'));
 
 //Database connection
-db.connect(process.env.MONGO_DB_URL, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => console.log('Database ' + process.env.MONGO_DB_URL + ' connected.'), err => {});
+const mongoUrl = 'mongodb://mongodb:27017/sim-dcs';
+db.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => console.log('Database ' + mongoUrl + ' connected.'), err => {});
 
 //Socket connection
-require('./udpserver_position').bind(process.env.UDPSERVER_POSITION_PORT);
+require('./udpserver_position').bind(process.env.UDPSERVER_POSITION_PORT, '0.0.0.0');
 //Socket connection
-require('./udpserver_mission').bind(process.env.UDPSERVER_MISSION_PORT);
+require('./udpserver_mission').bind(process.env.UDPSERVER_MISSION_PORT, '0.0.0.0');
 
 //Discord connection
 require('./discord-bot');
 
 //Webserver connection
-app.listen(process.env.WEBSERVER_PORT,'0.0.0.0', () => { console.log('Web Server listening on the port ' + process.env.WEBSERVER_PORT + '.') });
+app.listen(process.env.WEBSERVER_PORT, '0.0.0.0', () => { console.log('Web Server listening on the port ' + process.env.WEBSERVER_PORT + '.') });
